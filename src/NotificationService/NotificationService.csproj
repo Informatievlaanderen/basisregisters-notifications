@@ -5,9 +5,6 @@
     <!-- Error NETSDK1152: https://docs.microsoft.com/en-us/dotnet/core/compatibility/sdk/6.0/duplicate-files-in-output -->
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NotificationService.Abstractions\NotificationService.Abstractions.csproj" />
-  </ItemGroup>
   <PropertyGroup>
     <Version>1.0.0</Version>
     <PackageId>Be.Vlaanderen.Basisregisters.NotificationService</PackageId>

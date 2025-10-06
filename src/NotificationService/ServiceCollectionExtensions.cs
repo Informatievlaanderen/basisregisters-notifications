@@ -2,11 +2,11 @@ namespace NotificationService;
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Abstractions;
 using Marten;
 using Marten.Schema.Identity;
 using Marten.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Notification;
 using Weasel.Core;
 
 public static class ServiceCollectionExtensions
@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
         {
             options.Connection(connectionString);
             options.AutoCreateSchemaObjects = AutoCreate.All;
-            options.Schema.For<Notification>()
+            options.Schema.For<Notification.Notification>()
                 .IdStrategy(new CombGuidIdGeneration())
                 .Identity(x => x.NotificationId);
 

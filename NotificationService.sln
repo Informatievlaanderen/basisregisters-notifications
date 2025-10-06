@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService.Api.IntegrationTests", "test\NotificationService.Api.IntegrationTests\NotificationService.Api.IntegrationTests.csproj", "{6B218CAB-C625-43F1-900B-922D460D0336}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService.Abstractions", "src\NotificationService.Abstractions\NotificationService.Abstractions.csproj", "{64EB169A-5711-4D68-970B-4C65C6AA5B09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService.Api.Abstractions", "src\NotificationService.Api.Abstractions\NotificationService.Api.Abstractions.csproj", "{64EB169A-5711-4D68-970B-4C65C6AA5B09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

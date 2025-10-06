@@ -2,16 +2,14 @@ namespace NotificationService.Api.IntegrationTests;
 
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Be.Vlaanderen.Basisregisters.DockerUtilities;
+using Infrastructure;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using Npgsql;
 using Xunit;
 using static JwtTokenHelper;
@@ -31,7 +29,7 @@ public class NotificationServiceTests
         var claimsIdentity = new ClaimsIdentity([new Claim("internal", "true")]);
         var jwtToken = CreateJwtToken(claimsIdentity);
 
-        var application = new WebApplicationFactory<Program>()
+        var application = new WebApplicationFactory<Startup>()
           .WithWebHostBuilder(builder =>
           {
               const string connectionString = "Host=localhost;Port=5433;Database=notifications;Username=postgres;Password=postgres";
