@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "NotificationService.Api": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:9040;https://localhost:9041",
+      "launchUrl": "http://localhost:9040/swagger/index.html",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
