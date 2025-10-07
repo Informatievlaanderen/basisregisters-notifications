@@ -28,7 +28,7 @@ public sealed class NotificationServiceTests : IClassFixture<NotificationService
 
         // create notification
         var notificationId = 0;
-        var response = await client.PostAsync("v1/notificaties", JsonContent.Create(new MaakNotificatie
+        var response = await client.PostAsync("v1/notificaties", JsonContent.Create(new MaakNotificatieRequest
         {
             Inhoud = "#Test Inhoud\n * Test item 1\n * Test item 2",
             Titel = "Test Titel",

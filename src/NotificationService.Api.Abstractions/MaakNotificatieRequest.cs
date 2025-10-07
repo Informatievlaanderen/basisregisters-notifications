@@ -2,9 +2,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-public class MaakNotificatie
+[DataContract(Name = "MaakNotificatie")]
+public class MaakNotificatieRequest
 {
     [JsonPropertyName("geldigVanaf")]
     public DateTimeOffset? GeldigVanaf { get; set; }
