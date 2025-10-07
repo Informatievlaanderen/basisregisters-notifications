@@ -41,7 +41,7 @@ public class NotificationServiceTestFixture : IAsyncLifetime
         // start postgres
         _docker = DockerComposer.Compose("postgres_test.yml", "notification-service-integration-tests");
 
-        await CreateDatabase(configuration.GetConnectionString("Marten")!, "notifications");
+        await CreateDatabase(configuration.GetConnectionString("Marten")!, "notifications-integrationtests");
 
         var hostBuilder = new WebHostBuilder()
             .UseConfiguration(configuration)
@@ -84,7 +84,7 @@ public class NotificationServiceTestFixture : IAsyncLifetime
 
     private async Task CreateDatabase(string connectionString, string database)
     {
-        var createDbQuery = $"CREATE DATABASE {database}";
+        var createDbQuery = $"CREATE DATABASE \"{database}\"";
 
         await using var connection = new NpgsqlConnection(connectionString);
         await using var command = new NpgsqlCommand(createDbQuery, connection);
@@ -97,7 +97,7 @@ public class NotificationServiceTestFixture : IAsyncLifetime
                 await connection.OpenAsync();
                 break;
             }
-            catch (Exception ex)
+            catch
             {
                 attempt++;
                 await Task.Delay(TimeSpan.FromMilliseconds(200));
