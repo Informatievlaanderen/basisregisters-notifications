@@ -27,8 +27,8 @@ public class MaakNotificatie
     [JsonPropertyName("rollen")]
     public required ICollection<Rol> Rollen { get; set; }
 
-    [JsonPropertyName("sluitbaar")]
-    public bool Sluitbaar { get; set; }
+    [JsonPropertyName("kanSluiten")]
+    public bool KanSluiten { get; set; }
 
     [JsonPropertyName("links")]
     public required ICollection<NotificatieLink> Links { get; set; }

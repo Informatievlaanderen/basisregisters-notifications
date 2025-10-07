@@ -37,7 +37,7 @@ public sealed class NotificationServiceTests : IClassFixture<NotificationService
             Ernst = Ernst.Waarschuwing,
             GeldigVanaf = DateTimeOffset.Now,
             GeldigTot = DateTimeOffset.Now.AddDays(1),
-            Sluitbaar = false,
+            KanSluiten = false,
             Links = [new NotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
         }));
 

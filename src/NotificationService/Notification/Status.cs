@@ -4,6 +4,5 @@ public enum Status
 {
     Draft,
     Published,
-    Unpublished,
-    Expired
+    Unpublished
 }

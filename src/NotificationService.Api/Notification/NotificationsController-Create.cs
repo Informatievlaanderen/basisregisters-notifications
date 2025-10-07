@@ -38,7 +38,7 @@ public partial class NotificationsController
             request.Inhoud,
             request.Platformen.Select(x => x.ToString()).ToList(),
             request.Rollen.Select(x => x.ToString()).ToList(),
-            request.Sluitbaar,
+            request.KanSluiten,
             request.Links.Select(x => new NotificationLink(x.Label, x.Url)).ToList(),
             cancellationToken);
 
