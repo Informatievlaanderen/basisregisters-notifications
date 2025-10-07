@@ -37,6 +37,20 @@ public class AcmIdmTests
     }
 
     [Theory]
+    [InlineData("/v1/notificaties/1", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen")]
+    public async Task DeleteReturnsSuccess(string endpoint, string requiredScopes)
+    {
+        var client = _fixture.TestServer.CreateClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", await _fixture.GetAccessToken(requiredScopes));
+
+        var response = await client.DeleteAsync(endpoint, CancellationToken.None);
+        Assert.NotNull(response);
+        Assert.NotEqual(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.NotEqual(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    [Theory]
     [InlineData("/v1/notificaties")]
     [InlineData("/v1/notificaties/1/acties/publiceren")]
     [InlineData("/v1/notificaties/1/acties/intrekken")]
@@ -46,6 +60,17 @@ public class AcmIdmTests
 
         var response = await client.PostAsync(endpoint,
             new StringContent("{}", Encoding.UTF8, "application/json"), CancellationToken.None);
+        Assert.NotNull(response);
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Theory]
+    [InlineData("/v1/notificaties/1")]
+    public async Task DeleteReturnsUnauthorized(string endpoint)
+    {
+        var client = _fixture.TestServer.CreateClient();
+
+        var response = await client.DeleteAsync(endpoint, CancellationToken.None);
         Assert.NotNull(response);
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -62,6 +87,19 @@ public class AcmIdmTests
 
         var response = await client.PostAsync(endpoint,
             new StringContent("{}", Encoding.UTF8, "application/json"), CancellationToken.None);
+        Assert.NotNull(response);
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    [Theory]
+    [InlineData("/v1/notificaties/1")]
+    public async Task DeleteReturnsForbidden(string endpoint, string scope = "")
+    {
+        var client = _fixture.TestServer.CreateClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", await _fixture.GetAccessToken(scope));
+
+        var response = await client.DeleteAsync(endpoint, CancellationToken.None);
         Assert.NotNull(response);
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }

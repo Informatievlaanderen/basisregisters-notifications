@@ -22,4 +22,6 @@ public interface INotifications
     Task PublishNotification(int notificationId, CancellationToken cancellationToken = default);
 
     Task UnpublishNotification(int notificationId, CancellationToken cancellationToken = default);
+
+    Task DeleteNotification(int notificationId, CancellationToken cancellationToken = default);
 }

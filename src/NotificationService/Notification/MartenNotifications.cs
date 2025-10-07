@@ -91,4 +91,24 @@ public class MartenNotifications : INotifications
         session.Update(notification);
         await session.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task DeleteNotification(int notificationId, CancellationToken cancellationToken)
+    {
+        await using var session = _store.DirtyTrackedSession();
+
+        var notification = await session.LoadAsync<Notification>(notificationId, cancellationToken);
+
+        if (notification is null)
+        {
+            throw new NotificationNotFoundException(notificationId);
+        }
+
+        if (notification.Status != Status.Draft)
+        {
+            throw new NotificationHasInvalidStatusException(notificationId, notification.Status, Status.Draft);
+        }
+
+        session.Delete(notification);
+        await session.SaveChangesAsync(cancellationToken);
+    }
 }
