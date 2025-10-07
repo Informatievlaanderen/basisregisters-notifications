@@ -20,4 +20,6 @@ public interface INotifications
         CancellationToken cancellationToken = default);
 
     Task<bool> PublishNotification(int notificationId, CancellationToken cancellationToken = default);
+
+    Task<bool> UnpublishNotification(int notificationId, CancellationToken cancellationToken = default);
 }

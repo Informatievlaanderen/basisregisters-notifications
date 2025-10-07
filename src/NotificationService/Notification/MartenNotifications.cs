@@ -69,4 +69,24 @@ public class MartenNotifications : INotifications
 
         return true;
     }
+
+    public async Task<bool> UnpublishNotification(int notificationId, CancellationToken cancellationToken)
+    {
+        await using var session = _store.DirtyTrackedSession();
+
+        var notification = await session.LoadAsync<Notification>(notificationId, cancellationToken);
+
+        if (notification is null)
+        {
+            return false;
+        }
+
+        notification.Status = Status.Unpublished;
+        notification.LastModified = DateTimeOffset.UtcNow;
+
+        session.Update(notification);
+        await session.SaveChangesAsync(cancellationToken);
+
+        return true;
+    }
 }

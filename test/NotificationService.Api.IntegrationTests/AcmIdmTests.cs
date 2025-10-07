@@ -20,6 +20,8 @@ public class AcmIdmTests
 
     [Theory]
     [InlineData("/v1/notificaties", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen")]
+    [InlineData("/v1/notificaties/1/acties/publiceren", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen")]
+    [InlineData("/v1/notificaties/1/acties/intrekken", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen")]
     public async Task ReturnsSuccess(string endpoint, string requiredScopes)
     {
         var client = _fixture.TestServer.CreateClient();
@@ -36,6 +38,8 @@ public class AcmIdmTests
 
     [Theory]
     [InlineData("/v1/notificaties")]
+    [InlineData("/v1/notificaties/1/acties/publiceren")]
+    [InlineData("/v1/notificaties/1/acties/intrekken")]
     public async Task ReturnsUnauthorized(string endpoint)
     {
         var client = _fixture.TestServer.CreateClient();
@@ -48,7 +52,8 @@ public class AcmIdmTests
 
     [Theory]
     [InlineData("/v1/notificaties")]
-    //[InlineData("/v2/adressen/acties/snapshot", "dv_ar_adres_beheer")]
+    [InlineData("/v1/notificaties/1/acties/publiceren")]
+    [InlineData("/v1/notificaties/1/acties/intrekken")]
     public async Task ReturnsForbidden(string endpoint, string scope = "")
     {
         var client = _fixture.TestServer.CreateClient();
