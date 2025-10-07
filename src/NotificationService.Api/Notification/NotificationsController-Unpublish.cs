@@ -2,17 +2,22 @@ namespace NotificationService.Api.Notification;
 
 using System.Threading;
 using System.Threading.Tasks;
+using Be.Vlaanderen.Basisregisters.Api.Exceptions;
 using Be.Vlaanderen.Basisregisters.Auth.AcmIdm;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NotificationService.Notification;
+using NotificationService.Notification.Exceptions;
 
 public partial class NotificationsController
 {
     [HttpPost("{id}/acties/intrekken")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = PolicyNames.Adres.InterneBijwerker)]
@@ -24,14 +29,18 @@ public partial class NotificationsController
         [FromServices] INotifications notifications,
         CancellationToken cancellationToken)
     {
-        var unpublished = await notifications.UnpublishNotification(id, cancellationToken);
-
-        if (!unpublished)
+        try
         {
-            return NotFound();
+            await notifications.UnpublishNotification(id, cancellationToken);
+            return NoContent();
         }
-
-        return NoContent();
+        catch (NotificationNotFoundException)
+        {
+            throw new ApiException("Notificatie niet gevonden", StatusCodes.Status404NotFound);
+        }
+        catch (NotificationHasInvalidStatusException)
+        {
+            throw new ValidationException([new ValidationFailure(string.Empty, "TODO MESSAGE"){ErrorCode = "TODO CODE"}]);
+        }
     }
 }
-

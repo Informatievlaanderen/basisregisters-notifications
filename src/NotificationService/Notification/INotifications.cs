@@ -19,7 +19,7 @@ public interface INotifications
         ICollection<NotificationLink> links,
         CancellationToken cancellationToken = default);
 
-    Task<bool> PublishNotification(int notificationId, CancellationToken cancellationToken = default);
+    Task PublishNotification(int notificationId, CancellationToken cancellationToken = default);
 
-    Task<bool> UnpublishNotification(int notificationId, CancellationToken cancellationToken = default);
+    Task UnpublishNotification(int notificationId, CancellationToken cancellationToken = default);
 }

@@ -2,12 +2,14 @@ namespace NotificationService.Api.Notification;
 
 using System.Threading;
 using System.Threading.Tasks;
+using Be.Vlaanderen.Basisregisters.Api.Exceptions;
 using Be.Vlaanderen.Basisregisters.Auth.AcmIdm;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NotificationService.Notification;
+using NotificationService.Notification.Exceptions;
 
 public partial class NotificationsController
 {
@@ -24,14 +26,14 @@ public partial class NotificationsController
         [FromServices] INotifications notifications,
         CancellationToken cancellationToken)
     {
-        var published = await notifications.PublishNotification(id, cancellationToken);
-
-        if (!published)
+        try
         {
-            return NotFound();
+            await notifications.PublishNotification(id, cancellationToken);
+            return NoContent();
         }
-
-        return NoContent();
+        catch (NotificationNotFoundException)
+        {
+            throw new ApiException("Notificatie niet gevonden", StatusCodes.Status404NotFound);
+        }
     }
 }
-

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Marten;
+using NotificationService.Notification.Exceptions;
 
 public class MartenNotifications : INotifications
 {
@@ -50,7 +51,7 @@ public class MartenNotifications : INotifications
         return notification.NotificationId;
     }
 
-    public async Task<bool> PublishNotification(int notificationId, CancellationToken cancellationToken)
+    public async Task PublishNotification(int notificationId, CancellationToken cancellationToken)
     {
         await using var session = _store.DirtyTrackedSession();
 
@@ -58,7 +59,7 @@ public class MartenNotifications : INotifications
 
         if (notification is null)
         {
-            return false;
+            throw new NotificationNotFoundException(notificationId);
         }
 
         notification.Status = Status.Published;
@@ -66,11 +67,9 @@ public class MartenNotifications : INotifications
 
         session.Update(notification);
         await session.SaveChangesAsync(cancellationToken);
-
-        return true;
     }
 
-    public async Task<bool> UnpublishNotification(int notificationId, CancellationToken cancellationToken)
+    public async Task UnpublishNotification(int notificationId, CancellationToken cancellationToken)
     {
         await using var session = _store.DirtyTrackedSession();
 
@@ -78,7 +77,12 @@ public class MartenNotifications : INotifications
 
         if (notification is null)
         {
-            return false;
+            throw new NotificationNotFoundException(notificationId);
+        }
+
+        if (notification.Status != Status.Published)
+        {
+            throw new NotificationHasInvalidStatusException(notificationId, notification.Status, Status.Published);
         }
 
         notification.Status = Status.Unpublished;
@@ -86,7 +90,5 @@ public class MartenNotifications : INotifications
 
         session.Update(notification);
         await session.SaveChangesAsync(cancellationToken);
-
-        return true;
     }
 }
