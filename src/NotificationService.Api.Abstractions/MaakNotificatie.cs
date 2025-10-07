@@ -16,22 +16,22 @@ public class MaakNotificatie
     public Ernst Ernst { get; set; }
 
     [JsonPropertyName("titel")]
-    public string Titel { get; set; }
+    public required string Titel { get; set; }
 
     [JsonPropertyName("inhoud")]
-    public string Inhoud { get; set; }
+    public required string Inhoud { get; set; }
 
     [JsonPropertyName("platformen")]
-    public ICollection<Platform> Platformen { get; set; }
+    public required ICollection<Platform> Platformen { get; set; }
 
     [JsonPropertyName("rollen")]
-    public ICollection<Rol> Rollen { get; set; }
+    public required ICollection<Rol> Rollen { get; set; }
 
     [JsonPropertyName("sluitbaar")]
     public bool Sluitbaar { get; set; }
 
     [JsonPropertyName("links")]
-    public ICollection<NotificatieLink> Links { get; set; }
+    public required ICollection<NotificatieLink> Links { get; set; }
 }
 
 public record NotificatieLink(string Label, string Url);
