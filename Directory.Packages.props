@@ -9,7 +9,7 @@
         <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="3.7.400.130" />
 
         <PackageVersion Include="Be.Vlaanderen.Basisregisters.DockerUtilities" Version="4.0.0" />
-        <PackageVersion Include="Be.Vlaanderen.Basisregisters.GrAr.Notifications" Version="22.0.0" />
+        <PackageVersion Include="Be.Vlaanderen.Basisregisters.GrAr.Notifications" Version="22.2.0" />
         <PackageVersion Include="Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Middleware.AddVersionHeader" Version="5.0.0" />
 
         <PackageVersion Include="Datadog.Trace.Bundle" Version="3.14.2" />
