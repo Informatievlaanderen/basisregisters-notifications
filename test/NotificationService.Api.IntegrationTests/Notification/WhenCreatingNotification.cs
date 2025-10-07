@@ -1,21 +1,21 @@
-namespace NotificationService.Api.IntegrationTests;
+namespace NotificationService.Api.IntegrationTests.Notification;
 
 using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
 using Abstractions;
-using Be.Vlaanderen.Basisregisters.Auth.AcmIdm;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
-public sealed class NotificationServiceTests : IClassFixture<NotificationServiceTestFixture>
+[Collection("NotificationServiceCollection")]
+public class WhenCreatingNotification
 {
     private readonly NotificationServiceTestFixture _fixture;
 
-    public NotificationServiceTests(NotificationServiceTestFixture fixture)
+    public WhenCreatingNotification(NotificationServiceTestFixture fixture)
     {
         _fixture = fixture;
     }
@@ -24,11 +24,12 @@ public sealed class NotificationServiceTests : IClassFixture<NotificationService
     public async Task CreateNotification()
     {
         var client = _fixture.TestServer.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _fixture.GetAccessToken($"{Scopes.DvArAdresUitzonderingen} {Scopes.DvGrGeschetstgebouwUitzonderingen}"));
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _fixture.GetAccessToken(NotificationServiceTestFixture.RequiredScopes));
 
         // create notification
         var notificationId = 0;
-        var response = await client.PostAsync("v1/notificaties", JsonContent.Create(new MaakNotificatieRequest
+        var maakNotificatieRequest = new MaakNotificatieRequest
         {
             Inhoud = "#Test Inhoud\n * Test item 1\n * Test item 2",
             Titel = "Test Titel",
@@ -39,7 +40,9 @@ public sealed class NotificationServiceTests : IClassFixture<NotificationService
             GeldigTot = DateTimeOffset.Now.AddDays(1),
             KanSluiten = false,
             Links = [new NotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
-        }));
+        };
+
+        var response = await client.PostAsync("v1/notificaties", new StringContent(JsonConvert.SerializeObject(maakNotificatieRequest), Encoding.UTF8, MediaTypeHeaderValue.Parse("application/json").ToString()));
 
         if (response.IsSuccessStatusCode)
         {

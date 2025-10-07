@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Formatters.Json;
+using Be.Vlaanderen.Basisregisters.Auth.AcmIdm;
 using Be.Vlaanderen.Basisregisters.DockerUtilities;
 using Ductus.FluentDocker.Services;
 using IdentityModel;
@@ -14,11 +16,22 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Npgsql;
 using Xunit;
 
+[CollectionDefinition("NotificationServiceCollection")]
+public class NotificationServiceCollection : ICollectionFixture<NotificationServiceTestFixture>
+{
+    // This class has no code, and is never created. Its purpose is simply
+    // to be the place to apply [CollectionDefinition] and all the
+    // ICollectionFixture<> interfaces.
+}
+
 public class NotificationServiceTestFixture : IAsyncLifetime
 {
+    internal const string RequiredScopes = $"{Scopes.DvArAdresUitzonderingen} {Scopes.DvGrGeschetstgebouwUitzonderingen} {Scopes.DvGrIngemetengebouwUitzonderingen} {Scopes.DvWrUitzonderingenBeheer}";
+
     private string _clientId;
     private string _clientSecret;
     private readonly IDictionary<string, AccessToken> _accessTokens = new Dictionary<string, AccessToken>();
@@ -28,6 +41,8 @@ public class NotificationServiceTestFixture : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
+        JsonConvert.DefaultSettings = new JsonSerializerSettings().ConfigureDefaultForApi;
+
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
@@ -41,7 +56,7 @@ public class NotificationServiceTestFixture : IAsyncLifetime
         // start postgres
         _docker = DockerComposer.Compose("postgres_test.yml", "notification-service-integration-tests");
 
-        await CreateDatabase(configuration.GetConnectionString("Marten")!, "notifications-integrationtests");
+        await CreateDatabase(configuration.GetConnectionString("Marten")!, "notifications");
 
         var hostBuilder = new WebHostBuilder()
             .UseConfiguration(configuration)

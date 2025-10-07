@@ -8,7 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-public class AcmIdmTests : IClassFixture<NotificationServiceTestFixture>
+[Collection("NotificationServiceCollection")]
+public class AcmIdmTests
 {
     private readonly NotificationServiceTestFixture _fixture;
 

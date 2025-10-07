@@ -2,37 +2,35 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
-[DataContract(Name = "MaakNotificatie")]
-public class MaakNotificatieRequest
+public sealed class MaakNotificatieRequest
 {
-    [JsonPropertyName("geldigVanaf")]
+    [JsonProperty("geldigVanaf")]
     public DateTimeOffset? GeldigVanaf { get; set; }
 
-    [JsonPropertyName("geldigTot")]
+    [JsonProperty("geldigTot")]
     public DateTimeOffset? GeldigTot { get; set; }
 
-    [JsonPropertyName("ernst")]
+    [JsonProperty("ernst")]
     public Ernst Ernst { get; set; }
 
-    [JsonPropertyName("titel")]
+    [JsonProperty("titel")]
     public required string Titel { get; set; }
 
-    [JsonPropertyName("inhoud")]
+    [JsonProperty("inhoud")]
     public required string Inhoud { get; set; }
 
-    [JsonPropertyName("platformen")]
+    [JsonProperty("platformen")]
     public required ICollection<Platform> Platformen { get; set; }
 
-    [JsonPropertyName("rollen")]
+    [JsonProperty("rollen")]
     public required ICollection<Rol> Rollen { get; set; }
 
-    [JsonPropertyName("kanSluiten")]
+    [JsonProperty("kanSluiten")]
     public bool KanSluiten { get; set; }
 
-    [JsonPropertyName("links")]
+    [JsonProperty("links")]
     public required ICollection<NotificatieLink> Links { get; set; }
 }
 

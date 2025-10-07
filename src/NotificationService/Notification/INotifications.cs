@@ -18,4 +18,6 @@ public interface INotifications
         bool canClose,
         ICollection<NotificationLink> links,
         CancellationToken cancellationToken = default);
+
+    Task<bool> PublishNotification(int notificationId, CancellationToken cancellationToken = default);
 }
