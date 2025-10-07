@@ -1,4 +1,4 @@
-namespace NotificationService.Abstractions;
+namespace NotificationService.Api.Abstractions;
 
 public enum Status
 {

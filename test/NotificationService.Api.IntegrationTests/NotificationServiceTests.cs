@@ -1,78 +1,54 @@
 namespace NotificationService.Api.IntegrationTests;
 
 using System;
-using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using Be.Vlaanderen.Basisregisters.DockerUtilities;
-using Infrastructure;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
-using Npgsql;
+using Abstractions;
+using Be.Vlaanderen.Basisregisters.Auth.AcmIdm;
+using FluentAssertions;
+using Newtonsoft.Json;
 using Xunit;
-using static JwtTokenHelper;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-public class NotificationServiceTests
+public sealed class NotificationServiceTests : IClassFixture<NotificationServiceTestFixture>
 {
-    [Fact]
-    public async Task CreateGetUpdatePendingErrorCompleteDelete()
+    private readonly NotificationServiceTestFixture _fixture;
+
+    public NotificationServiceTests(NotificationServiceTestFixture fixture)
     {
-        // start postgres
-        using var _ = DockerComposer.Compose("postgres_test.yml", "notification-service-integration-tests");
+        _fixture = fixture;
+    }
 
-        await CreateDatabase("Host=localhost;Port=5433;Username=postgres;Password=postgres", "notifications");
-
-        // construct claims identity
-        var claimsIdentity = new ClaimsIdentity([new Claim("internal", "true")]);
-        var jwtToken = CreateJwtToken(claimsIdentity);
-
-        var application = new WebApplicationFactory<Startup>()
-          .WithWebHostBuilder(builder =>
-          {
-              const string connectionString = "Host=localhost;Port=5433;Database=notifications;Username=postgres;Password=postgres";
-              builder.ConfigureServices(services => services
-                .AddScoped(_ => new ClaimsPrincipal(claimsIdentity))
-                .AddMartenNotification(connectionString));
-          });
-
-        var client = application.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(jwtToken);
+    [Fact]
+    public async Task CreateNotification()
+    {
+        var client = _fixture.TestServer.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _fixture.GetAccessToken($"{Scopes.DvArAdresUitzonderingen} {Scopes.DvGrGeschetstgebouwUitzonderingen}"));
 
         // create notification
-        const string originator = "originator";
-        var notificationId = Guid.Empty;
-        var response = await client.PostAsync("/notifications/create", JsonContent.Create(new Dictionary<string, string> { { originator, originator } }));
+        var notificationId = 0;
+        var response = await client.PostAsync("v1/notificaties", JsonContent.Create(new MaakNotificatie
+        {
+            Inhoud = "#Test Inhoud\n * Test item 1\n * Test item 2",
+            Titel = "Test Titel",
+            Platformen = [Platform.Geoit, Platform.Lara],
+            Rollen = [Rol.InterneBeheerder, Rol.NietIngelogd, Rol.StandaardGebruiker],
+            Ernst = Ernst.Waarschuwing,
+            GeldigVanaf = DateTimeOffset.Now,
+            GeldigTot = DateTimeOffset.Now.AddDays(1),
+            Sluitbaar = false,
+            Links = [new NotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
+        }));
 
         if (response.IsSuccessStatusCode)
         {
-            notificationId = await JsonSerializer.DeserializeAsync<Guid>(await response.Content.ReadAsStreamAsync());
-        }
-    }
-
-    private async Task CreateDatabase(string connectionString, string database)
-    {
-        var createDbQuery = $"CREATE DATABASE {database}";
-
-        await using var connection = new NpgsqlConnection(connectionString);
-        await using var command = new NpgsqlCommand(createDbQuery, connection);
-
-        var attempt = 1;
-        while (attempt <= 5)
-        {
-            try
-            {
-                await connection.OpenAsync();
-            }
-            catch (Exception)
-            {
-                attempt++;
-                await Task.Delay(TimeSpan.FromMilliseconds(200));
-            }
+            var createResult = JsonConvert.DeserializeObject<NotificatieAangemaakt>(await response.Content.ReadAsStringAsync());
+            createResult.Should().NotBeNull();
+            notificationId = createResult!.NotificatieId;
         }
 
-        await command.ExecuteNonQueryAsync();
+        response.IsSuccessStatusCode.Should().BeTrue();
+        notificationId.Should().BeGreaterThan(0);
     }
 }

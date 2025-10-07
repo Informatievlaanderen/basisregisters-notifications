@@ -16,11 +16,12 @@ using Severity = NotificationService.Notification.Severity;
 
 public partial class NotificationsController
 {
-    [HttpPost]
+    [HttpPost("")]
     [ProducesResponseType(typeof(NotificatieAangemaakt), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = PolicyNames.Adres.InterneBijwerker)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = PolicyNames.GeschetstGebouw.InterneBijwerker)]
     public async Task<IActionResult> Create(
         [FromBody] MaakNotificatie request,
         [FromServices] CreateNotificationRequestValidator validator,
@@ -54,7 +55,7 @@ public partial class NotificationsController
         };
 }
 
-public class CreateNotificationRequestValidator: AbstractValidator<MaakNotificatie>
+public class CreateNotificationRequestValidator : AbstractValidator<MaakNotificatie>
 {
     public CreateNotificationRequestValidator()
     {

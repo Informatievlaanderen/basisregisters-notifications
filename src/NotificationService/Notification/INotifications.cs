@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public interface INotifications
 {
-    Task<Guid> CreateNotification(
+    Task<int> CreateNotification(
         DateTimeOffset? validFrom,
         DateTimeOffset? validTo,
         Severity severity,

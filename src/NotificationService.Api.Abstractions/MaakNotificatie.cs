@@ -1,4 +1,4 @@
-﻿namespace NotificationService.Abstractions;
+﻿namespace NotificationService.Api.Abstractions;
 
 using System;
 using System.Collections.Generic;

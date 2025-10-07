@@ -1,5 +1,3 @@
-namespace NotificationService.Abstractions;
+namespace NotificationService.Api.Abstractions;
 
-using System;
-
-public record NotificatieAangemaakt(Guid NotificatieId);
+public record NotificatieAangemaakt(int NotificatieId);

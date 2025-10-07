@@ -3,7 +3,7 @@ namespace NotificationService;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Marten;
-using Marten.Schema.Identity;
+using Marten.Schema.Identity.Sequences;
 using Marten.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Notification;
@@ -18,8 +18,8 @@ public static class ServiceCollectionExtensions
             options.Connection(connectionString);
             options.AutoCreateSchemaObjects = AutoCreate.All;
             options.Schema.For<Notification.Notification>()
-                .IdStrategy(new CombGuidIdGeneration())
-                .Identity(x => x.NotificationId);
+                .Identity(x => x.NotificationId)
+                .IdStrategy(new HiloIdGeneration(typeof(Notification.Notification), new HiloSettings{MaxLo = 10}));
 
             options.UseSystemTextJsonForSerialization();
 

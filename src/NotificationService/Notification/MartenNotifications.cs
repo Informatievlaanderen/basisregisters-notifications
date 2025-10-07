@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Marten;
-using Marten.Schema.Identity;
 
 public class MartenNotifications : INotifications
 {
@@ -16,7 +15,7 @@ public class MartenNotifications : INotifications
         _store = store;
     }
 
-    public async Task<Guid> CreateNotification(
+    public async Task<int> CreateNotification(
         DateTimeOffset? validFrom,
         DateTimeOffset? validTo,
         Severity severity,
@@ -29,12 +28,9 @@ public class MartenNotifications : INotifications
         CancellationToken cancellationToken
     )
     {
-        var notificationId = CombGuidIdGeneration.NewGuid();
-
         await using var session = _store.DirtyTrackedSession();
-
-        session.Insert(new Notification(
-            notificationId,
+        var notification = new Notification(
+            0,
             Status.Draft,
             severity,
             title,
@@ -45,10 +41,12 @@ public class MartenNotifications : INotifications
             validTo ?? new DateTimeOffset(new DateTime(9999, 1, 1), TimeSpan.Zero),
             canClose,
             links
-        ));
+        );
+
+        session.Insert(notification);
 
         await session.SaveChangesAsync(cancellationToken);
 
-        return notificationId;
+        return notification.NotificationId;
     }
 }

@@ -98,7 +98,7 @@ public class Startup
                                     tags: [DatabaseTag, "sql", "npgsql"]);
                             }
                         },
-                        Authorization = options => { options.AddAddressPolicies([]); }
+                        Authorization = options => { options.AddAddressPolicies([]).AddBuildingPolicies([]).AddRoadPolicies([]); }
                     }
                 }
                 .EnableJsonErrorActionFilterOption())
