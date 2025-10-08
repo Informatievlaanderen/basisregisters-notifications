@@ -24,4 +24,8 @@ public interface INotifications
     Task UnpublishNotification(int notificationId, CancellationToken cancellationToken = default);
 
     Task DeleteNotification(int notificationId, CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<Notification>> GetNotifications(CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<Notification>> GetActiveNotifications(string platform, CancellationToken cancellationToken = default);
 }

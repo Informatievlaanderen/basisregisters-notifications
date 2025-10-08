@@ -2,6 +2,7 @@ namespace NotificationService.Notification;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Marten;
@@ -110,5 +111,31 @@ public class MartenNotifications : INotifications
 
         session.Delete(notification);
         await session.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Notification>> GetNotifications(CancellationToken cancellationToken)
+    {
+        await using var session = _store.QuerySession();
+
+        var notifications = await session.Query<Notification>()
+            .ToListAsync(cancellationToken);
+
+        return notifications;
+    }
+
+    public async Task<IReadOnlyList<Notification>> GetActiveNotifications(string platform, CancellationToken cancellationToken)
+    {
+        await using var session = _store.QuerySession();
+
+        var notifications = await session.Query<Notification>()
+            .Where(x =>
+                x.Platforms.Contains(platform)
+                && x.Status == Status.Published
+                && x.ValidFrom < DateTimeOffset.UtcNow
+                && x.ValidTo > DateTimeOffset.UtcNow
+            )
+            .ToListAsync(cancellationToken);
+
+        return notifications;
     }
 }

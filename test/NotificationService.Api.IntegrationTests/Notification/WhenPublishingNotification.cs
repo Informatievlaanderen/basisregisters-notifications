@@ -28,7 +28,7 @@ public class WhenPublishingNotification
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _fixture.GetAccessToken(NotificationServiceTestFixture.RequiredScopes));
 
         // Create notification first
-        var createResponse = await client.PostAsync("v1/notificaties", JsonContent.Create(new MaakNotificatieRequest
+        var createResponse = await client.PostAsJsonUsingNewtonsoftAsync("v1/notificaties", new MaakNotificatieRequest
         {
             Inhoud = "#Test Inhoud voor publicatie",
             Titel = "Test Titel voor Publicatie",
@@ -38,8 +38,8 @@ public class WhenPublishingNotification
             GeldigVanaf = DateTimeOffset.Now,
             GeldigTot = DateTimeOffset.Now.AddDays(1),
             KanSluiten = true,
-            Links = [new NotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
-        }));
+            Links = [new MaakNotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
+        });
 
         createResponse.IsSuccessStatusCode.Should().BeTrue();
         var createResult = JsonConvert.DeserializeObject<NotificatieAangemaakt>(await createResponse.Content.ReadAsStringAsync());

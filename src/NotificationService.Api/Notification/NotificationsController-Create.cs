@@ -102,7 +102,7 @@ public class CreateNotificationRequestValidator : AbstractValidator<MaakNotifica
     }
 }
 
-public class LinkValidator : AbstractValidator<NotificatieLink>
+public class LinkValidator : AbstractValidator<MaakNotificatieLink>
 {
     public LinkValidator()
     {

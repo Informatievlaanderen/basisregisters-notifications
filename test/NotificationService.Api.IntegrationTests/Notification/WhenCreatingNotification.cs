@@ -39,10 +39,10 @@ public class WhenCreatingNotification
             GeldigVanaf = DateTimeOffset.Now,
             GeldigTot = DateTimeOffset.Now.AddDays(1),
             KanSluiten = false,
-            Links = [new NotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
+            Links = [new MaakNotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
         };
 
-        var response = await client.PostAsync("v1/notificaties", new StringContent(JsonConvert.SerializeObject(maakNotificatieRequest), Encoding.UTF8, MediaTypeHeaderValue.Parse("application/json").ToString()));
+        var response = await client.PostAsJsonUsingNewtonsoftAsync("v1/notificaties", maakNotificatieRequest);
 
         if (response.IsSuccessStatusCode)
         {

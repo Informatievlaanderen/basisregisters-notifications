@@ -31,7 +31,7 @@ public sealed class MaakNotificatieRequest
     public bool KanSluiten { get; set; }
 
     [JsonProperty("links")]
-    public required ICollection<NotificatieLink> Links { get; set; }
+    public ICollection<MaakNotificatieLink> Links { get; set; } = [];
 }
 
-public record NotificatieLink(string Label, string Url);
+public record MaakNotificatieLink(string Label, string Url);

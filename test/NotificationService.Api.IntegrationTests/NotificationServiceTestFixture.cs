@@ -81,7 +81,7 @@ public class NotificationServiceTestFixture : IAsyncLifetime
                 Address = "https://authenticatie-ti.vlaanderen.be/op/v1/token",
                 ClientId = _clientId,
                 ClientSecret = _clientSecret,
-                Parameters = new Parameters(new[] { new KeyValuePair<string, string>("scope", requiredScopes) })
+                Parameters = new Parameters([new KeyValuePair<string, string>("scope", requiredScopes)])
             });
 
         var response = await tokenClient.RequestTokenAsync(OidcConstants.GrantTypes.ClientCredentials);

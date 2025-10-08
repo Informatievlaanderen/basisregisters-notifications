@@ -5,5 +5,4 @@ public enum Rol
     NietIngelogd,
     StandaardGebruiker,
     InterneBeheerder
-    //TODO-pr
 }

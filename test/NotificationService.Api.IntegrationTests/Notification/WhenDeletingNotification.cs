@@ -27,7 +27,7 @@ public class WhenDeletingNotification
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _fixture.GetAccessToken(NotificationServiceTestFixture.RequiredScopes));
 
         // Create notification (status will be Draft)
-        var createResponse = await client.PostAsync("v1/notificaties", JsonContent.Create(new MaakNotificatieRequest
+        var createResponse = await client.PostAsJsonUsingNewtonsoftAsync("v1/notificaties", new MaakNotificatieRequest
         {
             Inhoud = "#Test Inhoud voor verwijderen",
             Titel = "Test Titel voor Verwijderen",
@@ -37,8 +37,8 @@ public class WhenDeletingNotification
             GeldigVanaf = DateTimeOffset.Now,
             GeldigTot = DateTimeOffset.Now.AddDays(1),
             KanSluiten = true,
-            Links = [new NotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
-        }));
+            Links = [new MaakNotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
+        });
 
         createResponse.IsSuccessStatusCode.Should().BeTrue();
         var createResult = JsonConvert.DeserializeObject<NotificatieAangemaakt>(await createResponse.Content.ReadAsStringAsync());
@@ -71,7 +71,7 @@ public class WhenDeletingNotification
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _fixture.GetAccessToken(NotificationServiceTestFixture.RequiredScopes));
 
         // Create notification
-        var createResponse = await client.PostAsync("v1/notificaties", JsonContent.Create(new MaakNotificatieRequest
+        var createResponse = await client.PostAsJsonUsingNewtonsoftAsync("v1/notificaties", new MaakNotificatieRequest
         {
             Inhoud = "#Test Inhoud voor delete test",
             Titel = "Test Titel voor Delete met Published Status",
@@ -81,8 +81,8 @@ public class WhenDeletingNotification
             GeldigVanaf = DateTimeOffset.Now,
             GeldigTot = DateTimeOffset.Now.AddDays(1),
             KanSluiten = true,
-            Links = [new NotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
-        }));
+            Links = [new MaakNotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
+        });
 
         createResponse.IsSuccessStatusCode.Should().BeTrue();
         var createResult = JsonConvert.DeserializeObject<NotificatieAangemaakt>(await createResponse.Content.ReadAsStringAsync());
@@ -94,7 +94,6 @@ public class WhenDeletingNotification
 
         // Try to delete published notification (should fail)
         var deleteResponse = await client.DeleteAsync($"v1/notificaties/{notificationId}");
-
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
@@ -105,7 +104,7 @@ public class WhenDeletingNotification
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _fixture.GetAccessToken(NotificationServiceTestFixture.RequiredScopes));
 
         // Create notification
-        var createResponse = await client.PostAsync("v1/notificaties", JsonContent.Create(new MaakNotificatieRequest
+        var createResponse = await client.PostAsJsonUsingNewtonsoftAsync("v1/notificaties", new MaakNotificatieRequest
         {
             Inhoud = "#Test Inhoud voor delete test",
             Titel = "Test Titel voor Delete met Unpublished Status",
@@ -115,8 +114,8 @@ public class WhenDeletingNotification
             GeldigVanaf = DateTimeOffset.Now,
             GeldigTot = DateTimeOffset.Now.AddDays(1),
             KanSluiten = true,
-            Links = [new NotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
-        }));
+            Links = [new MaakNotificatieLink("informatie", "https://basisregisters.vlaanderen.be/nl")]
+        });
 
         createResponse.IsSuccessStatusCode.Should().BeTrue();
         var createResult = JsonConvert.DeserializeObject<NotificatieAangemaakt>(await createResponse.Content.ReadAsStringAsync());

@@ -127,11 +127,11 @@ public sealed class CreateNotificationRequestValidatorTests
     public void GivenEmptyLinkLabel_ThenReturnsExpectedMessage()
     {
         // Arrange
-        var link = _fixture.Build<NotificatieLink>()
+        var link = _fixture.Build<MaakNotificatieLink>()
             .With(x => x.Label, string.Empty)
             .Create();
         var maakNotificatieRequest = _fixture.Build<MaakNotificatieRequest>()
-            .With(x => x.Links, new List<NotificatieLink> { link })
+            .With(x => x.Links, new List<MaakNotificatieLink> { link })
             .Create();
 
         // Act
@@ -147,11 +147,11 @@ public sealed class CreateNotificationRequestValidatorTests
     public void GivenLinkLabelTooLarge_ThenReturnsExpectedMessage()
     {
         // Arrange
-        var link = _fixture.Build<NotificatieLink>()
+        var link = _fixture.Build<MaakNotificatieLink>()
             .With(x => x.Label, new string('a', 101))
             .Create();
         var maakNotificatieRequest = _fixture.Build<MaakNotificatieRequest>()
-            .With(x => x.Links, new List<NotificatieLink> { link })
+            .With(x => x.Links, new List<MaakNotificatieLink> { link })
             .Create();
 
         // Act
@@ -167,11 +167,11 @@ public sealed class CreateNotificationRequestValidatorTests
     public void GivenEmptyLinkUrl_ThenReturnsExpectedMessage()
     {
         // Arrange
-        var link = _fixture.Build<NotificatieLink>()
+        var link = _fixture.Build<MaakNotificatieLink>()
             .With(x => x.Url, string.Empty)
             .Create();
         var maakNotificatieRequest = _fixture.Build<MaakNotificatieRequest>()
-            .With(x => x.Links, new List<NotificatieLink> { link })
+            .With(x => x.Links, new List<MaakNotificatieLink> { link })
             .Create();
 
         // Act
@@ -187,11 +187,11 @@ public sealed class CreateNotificationRequestValidatorTests
     public void GivenLinkUrlNotValidFormat_ThenReturnsExpectedMessage()
     {
         // Arrange
-        var link = _fixture.Build<NotificatieLink>()
+        var link = _fixture.Build<MaakNotificatieLink>()
             .With(x => x.Url, "invalid-url")
             .Create();
         var maakNotificatieRequest = _fixture.Build<MaakNotificatieRequest>()
-            .With(x => x.Links, new List<NotificatieLink> { link })
+            .With(x => x.Links, new List<MaakNotificatieLink> { link })
             .Create();
 
         // Act
