@@ -1,6 +1,5 @@
 ﻿namespace NotificationService.Api.Notification;
 
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,30 +28,9 @@ public partial class NotificationsController
             cancellationToken);
 
         var notificaties = result
-            .Select(x => new Notificatie
-            {
-                NotificatieId = x.NotificationId,
-                GeldigVanaf = x.ValidFrom,
-                GeldigTot = x.ValidTo,
-                Ernst = MapToErnst(x.Severity),
-                Titel = x.Title,
-                Inhoud = x.BodyMd,
-                Platformen = x.Platforms.Select(Enum.Parse<Platform>).ToList(),
-                Rollen = x.Roles.Select(Enum.Parse<Rol>).ToList(),
-                KanSluiten = x.CanClose,
-                Links = x.Links.Select(l => new NotificatieLink(l.Label, l.Url)).ToList()
-            })
+            .Select(x => x.MapToNotificatie())
             .ToList();
 
         return Ok(notificaties);
     }
-
-    private static Ernst MapToErnst(Severity severity) =>
-        severity switch
-        {
-            Severity.Information => Ernst.Informatie,
-            Severity.Warning => Ernst.Waarschuwing,
-            Severity.Error => Ernst.Fout,
-            _ => throw new NotImplementedException($"{nameof(Severity)}.{severity}")
-        };
 }

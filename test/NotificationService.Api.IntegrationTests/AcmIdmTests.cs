@@ -31,6 +31,7 @@ public class AcmIdmTests
         new(HttpMethod.Post, "v1/notificaties/{id}/acties/publiceren", "v1/notificaties/1/acties/publiceren", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen"),
         new(HttpMethod.Post, "v1/notificaties/{id}/acties/intrekken", "v1/notificaties/1/acties/intrekken", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen"),
         new(HttpMethod.Get, "v1/notificaties/{platform}", "v1/notificaties/lara", "dv_ar_adres_beheer"),
+        new(HttpMethod.Get, "v1/notificaties", "v1/notificaties", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen"),
     };
     private sealed record Endpoint(HttpMethod Method, string TemplateUrl, string ExampleUrl, string RequiredScopes);
     public static IEnumerable<object[]> EndpointsMemberData() => Endpoints.Select(x => new object[] { x.Method, x.ExampleUrl, x.RequiredScopes });
@@ -109,6 +110,22 @@ public class AcmIdmTests
 
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
         });
+    }
+
+    [Theory]
+    [InlineData("/v1/notificaties/Geoit", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen")]
+    [InlineData("/v1/notificaties/Lara", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen")]
+    [InlineData("/v1/notificaties", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen")]
+    public async Task GetByPlatformReturnsSuccess(string endpoint, string requiredScopes)
+    {
+        var client = _fixture.TestServer.CreateClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", await _fixture.GetAccessToken(requiredScopes));
+
+        var response = await client.GetAsync(endpoint, CancellationToken.None);
+        Assert.NotNull(response);
+        Assert.NotEqual(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.NotEqual(HttpStatusCode.Forbidden, response.StatusCode);
     }
 
     private static HttpRequestMessage CreateRequestMessage(HttpMethod method, string endpoint)

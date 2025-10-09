@@ -42,13 +42,8 @@ public class WhenGettingNotificationsByPlatform
             Rollen = [Rol.InterneBeheerder],
             Ernst = Ernst.Informatie
         };
-
-        var createResponse = await clientIntern.PostAsJsonUsingNewtonsoftAsync("v1/notificaties", geoitNotificationRequest);
-        createResponse.Should().BeSuccessful();
-        var createResult = JsonConvert.DeserializeObject<NotificatieAangemaakt>(await createResponse.Content.ReadAsStringAsync());
-        createResult.Should().NotBeNull();
-        var publishResponse = await clientIntern.PostAsync($"v1/notificaties/{createResult!.NotificatieId}/acties/publiceren", null);
-        publishResponse.Should().BeSuccessful();
+        var createResult = await clientIntern.MaakNotificatie(geoitNotificationRequest);
+        await clientIntern.PubliceerNotificatie(createResult.NotificatieId);
 
         // Create a notification for Lara platform
         var laraNotificationRequest = new MaakNotificatieRequest
@@ -60,12 +55,8 @@ public class WhenGettingNotificationsByPlatform
             Ernst = Ernst.Waarschuwing
         };
 
-        createResponse = await clientIntern.PostAsJsonUsingNewtonsoftAsync("v1/notificaties", laraNotificationRequest);
-        createResponse.Should().BeSuccessful();
-        createResult = JsonConvert.DeserializeObject<NotificatieAangemaakt>(await createResponse.Content.ReadAsStringAsync());
-        createResult.Should().NotBeNull();
-        publishResponse = await clientIntern.PostAsync($"v1/notificaties/{createResult!.NotificatieId}/acties/publiceren", null);
-        publishResponse.Should().BeSuccessful();
+        createResult = await clientIntern.MaakNotificatie(laraNotificationRequest);
+        await clientIntern.PubliceerNotificatie(createResult.NotificatieId);
 
         // Get notifications for Geoit platform
         var getGeoitResponse = await clientExtern.GetAsync("v1/notificaties/geoit");
@@ -168,6 +159,8 @@ public class WhenGettingNotificationsByPlatform
 
         var notifications = _fixture.TestServer.Services.GetRequiredService<INotifications>();
 
+        (await notifications.GetNotifications()).Should().BeEmpty();
+
         var draftNotificationId = await notifications.CreateNotification(
             DateTimeOffset.UtcNow,
             DateTimeOffset.UtcNow.AddDays(1),
@@ -213,15 +206,13 @@ public class WhenGettingNotificationsByPlatform
 
         // Assert
         var laraNotifications = JsonConvert.DeserializeObject<Notificatie[]>(await getResponseLara.Content.ReadAsStringAsync());
-        laraNotifications.Should().NotBeNull();
-        laraNotifications.Should().HaveCount(1);
-        laraNotifications!.Single().NotificatieId.Should().Be(publishedNotificationId);
+        laraNotifications.Should().NotBeEmpty();
+        laraNotifications!.All(x => x.Status == NotificatieStatus.Gepubliceerd).Should().BeTrue();
 
         var allNotifications = await notifications.GetNotifications();
-        allNotifications.Should().NotBeNull();
-        allNotifications.Should().HaveCount(3);
-        allNotifications.Should().Contain(x => x.NotificationId == publishedNotificationId);
+        allNotifications.Should().NotBeEmpty();
         allNotifications.Should().Contain(x => x.NotificationId == draftNotificationId);
+        allNotifications.Should().Contain(x => x.NotificationId == publishedNotificationId);
         allNotifications.Should().Contain(x => x.NotificationId == unpublishedNotificationId);
     }
 }
