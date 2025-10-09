@@ -11,8 +11,8 @@ using Newtonsoft.Json;
 using NotificationService.Api.Abstractions;
 using Xunit;
 
-[Collection("NotificationServiceCollection")]
-public class WhenPublishingNotification
+[Collection("DockerFixtureCollection")]
+public class WhenPublishingNotification : IClassFixture<NotificationServiceTestFixture>
 {
     private readonly NotificationServiceTestFixture _fixture;
 

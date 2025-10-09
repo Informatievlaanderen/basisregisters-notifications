@@ -14,8 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Sdk;
 
-[Collection("NotificationServiceCollection")]
-public class AcmIdmTests
+[Collection("DockerFixtureCollection")]
+public class AcmIdmTests : IClassFixture<NotificationServiceTestFixture>
 {
     private readonly NotificationServiceTestFixture _fixture;
 
@@ -31,6 +31,7 @@ public class AcmIdmTests
         new(HttpMethod.Post, "v1/notificaties/{id}/acties/publiceren", "v1/notificaties/1/acties/publiceren", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen"),
         new(HttpMethod.Post, "v1/notificaties/{id}/acties/intrekken", "v1/notificaties/1/acties/intrekken", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen"),
         new(HttpMethod.Get, "v1/notificaties/{platform}", "v1/notificaties/lara", "dv_ar_adres_beheer"),
+        new(HttpMethod.Get, "v1/notificaties", "v1/notificaties", "dv_ar_adres_uitzonderingen dv_gr_geschetstgebouw_uitzonderingen dv_gr_ingemetengebouw_uitzonderingen dv_wr_uitzonderingen"),
     };
     private sealed record Endpoint(HttpMethod Method, string TemplateUrl, string ExampleUrl, string RequiredScopes);
     public static IEnumerable<object[]> EndpointsMemberData() => Endpoints.Select(x => new object[] { x.Method, x.ExampleUrl, x.RequiredScopes });

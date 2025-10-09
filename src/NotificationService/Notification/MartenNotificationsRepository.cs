@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 using Marten;
 using NotificationService.Notification.Exceptions;
 
-public class MartenNotifications : INotifications
+public class MartenNotificationsRepository : INotificationsRepository
 {
     private readonly IDocumentStore _store;
 
-    public MartenNotifications(IDocumentStore store)
+    public MartenNotificationsRepository(IDocumentStore store)
     {
         _store = store;
     }
@@ -33,14 +33,14 @@ public class MartenNotifications : INotifications
         await using var session = _store.DirtyTrackedSession();
         var notification = new Notification(
             0,
-            Status.Draft,
+            NotificationStatus.Draft,
             severity,
             title,
             bodyMd,
             platforms,
             roles,
             validFrom ?? DateTimeOffset.UtcNow,
-            validTo ?? new DateTimeOffset(new DateTime(9999, 1, 1), TimeSpan.Zero),
+            validTo ?? new DateTimeOffset(new DateTime(9999, 12, 31), TimeSpan.Zero),
             canClose,
             links
         );
@@ -63,7 +63,7 @@ public class MartenNotifications : INotifications
             throw new NotificationNotFoundException(notificationId);
         }
 
-        notification.Status = Status.Published;
+        notification.Status = NotificationStatus.Published;
         notification.LastModified = DateTimeOffset.UtcNow;
 
         session.Update(notification);
@@ -81,12 +81,12 @@ public class MartenNotifications : INotifications
             throw new NotificationNotFoundException(notificationId);
         }
 
-        if (notification.Status != Status.Published)
+        if (notification.Status != NotificationStatus.Published)
         {
-            throw new NotificationHasInvalidStatusException(notificationId, notification.Status, Status.Published);
+            throw new NotificationHasInvalidStatusException(notificationId, notification.Status, NotificationStatus.Published);
         }
 
-        notification.Status = Status.Unpublished;
+        notification.Status = NotificationStatus.Unpublished;
         notification.LastModified = DateTimeOffset.UtcNow;
 
         session.Update(notification);
@@ -104,9 +104,9 @@ public class MartenNotifications : INotifications
             throw new NotificationNotFoundException(notificationId);
         }
 
-        if (notification.Status != Status.Draft)
+        if (notification.Status != NotificationStatus.Draft)
         {
-            throw new NotificationHasInvalidStatusException(notificationId, notification.Status, Status.Draft);
+            throw new NotificationHasInvalidStatusException(notificationId, notification.Status, NotificationStatus.Draft);
         }
 
         session.Delete(notification);
@@ -130,10 +130,46 @@ public class MartenNotifications : INotifications
         var notifications = await session.Query<Notification>()
             .Where(x =>
                 x.Platforms.Contains(platform)
-                && x.Status == Status.Published
+                && x.Status == NotificationStatus.Published
                 && x.ValidFrom < DateTimeOffset.UtcNow
                 && x.ValidTo > DateTimeOffset.UtcNow
             )
+            .ToListAsync(cancellationToken);
+
+        return notifications;
+    }
+
+    public async Task<IReadOnlyList<Notification>> GetNotifications(
+        NotificationStatus? status = null,
+        DateTimeOffset? validFrom = null,
+        DateTimeOffset? validTo = null,
+        int limit = 100,
+        CancellationToken cancellationToken = default)
+    {
+        await using var session = _store.QuerySession();
+
+        var query = session.Query<Notification>().AsQueryable();
+
+        if (status.HasValue)
+        {
+            query = query.Where(x => x.Status == status);
+        }
+
+        if (validFrom.HasValue)
+        {
+            query = query.Where(x => x.ValidFrom >= validFrom.Value);
+        }
+
+        if (validTo.HasValue)
+        {
+            query = query.Where(x => x.ValidTo <= validTo.Value);
+        }
+
+        // Sort by ValidFrom descending and limit records
+        var notifications = await query
+            .OrderByDescending(x => x.ValidFrom)
+            .ThenByDescending(x => x.ValidTo)
+            .Take(limit)
             .ToListAsync(cancellationToken);
 
         return notifications;

@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NotificationService.Notification;
-using Severity = NotificationService.Notification.Severity;
+using Validation;
 
 public partial class NotificationsController
 {
@@ -27,15 +27,15 @@ public partial class NotificationsController
     public async Task<IActionResult> Create(
         [FromBody] MaakNotificatieRequest request,
         [FromServices] CreateNotificationRequestValidator validator,
-        [FromServices] INotifications notifications,
+        [FromServices] INotificationsRepository notificationsRepository,
         CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        var notificationId = await notifications.CreateNotification(
+        var notificationId = await notificationsRepository.CreateNotification(
             request.GeldigVanaf,
             request.GeldigTot,
-            MapToSeverity(request.Ernst),
+            request.Ernst.MapToSeverity(),
             request.Titel,
             request.Inhoud,
             request.Platformen.Select(x => x.ToString()).ToList(),
@@ -46,15 +46,6 @@ public partial class NotificationsController
 
         return Ok(new NotificatieAangemaakt(notificationId));
     }
-
-    private static Severity MapToSeverity(Ernst ernst) =>
-        ernst switch
-        {
-            Ernst.Informatie => Severity.Information,
-            Ernst.Waarschuwing => Severity.Warning,
-            Ernst.Fout => Severity.Error,
-            _ => throw new NotImplementedException($"{nameof(Ernst)}.{ernst}")
-        };
 }
 
 public class CreateNotificationRequestValidator : AbstractValidator<MaakNotificatieRequest>
@@ -64,8 +55,8 @@ public class CreateNotificationRequestValidator : AbstractValidator<MaakNotifica
         //TODO-pr: add errorcodes
         RuleFor(x => x.Titel)
             .NotEmpty()
-            .WithMessage("'Titel' mag niet leeg zijn.")
-            .WithErrorCode("A");
+            .WithMessage(ValidationErrors.CreateNotification.TitelIsRequired.Message)
+            .WithErrorCode(ValidationErrors.CreateNotification.TitelIsRequired.Code);
 
         RuleFor(x => x.Inhoud)
             .NotEmpty()

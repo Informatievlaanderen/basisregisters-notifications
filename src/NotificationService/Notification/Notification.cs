@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public record Notification(
     int NotificationId,
-    Status Status,
+    NotificationStatus Status,
     Severity Severity,
     string Title,
     string BodyMd,
@@ -20,7 +20,7 @@ public record Notification(
     private DateTimeOffset _lastModified = DateTimeOffset.UtcNow;
 
     public int NotificationId { get; set; } = NotificationId;
-    public Status Status { get; set; } = Status;
+    public NotificationStatus Status { get; set; } = Status;
     public Severity Severity { get; set; } = Severity;
     public string Title { get; set; } = Title;
     public string BodyMd { get; set; } = BodyMd;

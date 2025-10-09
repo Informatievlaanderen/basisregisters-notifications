@@ -1936,6 +1936,7 @@
       "Be.Vlaanderen.Basisregisters.NotificationService.Abstractions": {
         "type": "Project",
         "dependencies": {
+          "Be.Vlaanderen.Basisregisters.NotificationService": "[1.0.0, )",
           "Newtonsoft.Json": "[13.0.3, )"
         }
       },

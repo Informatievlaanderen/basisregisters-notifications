@@ -10,8 +10,8 @@ using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;
 
-[Collection("NotificationServiceCollection")]
-public class WhenCreatingNotification
+[Collection("DockerFixtureCollection")]
+public class WhenCreatingNotification : IClassFixture<NotificationServiceTestFixture>
 {
     private readonly NotificationServiceTestFixture _fixture;
 

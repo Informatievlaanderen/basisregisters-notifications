@@ -3,12 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Formatters.Json;
 using Be.Vlaanderen.Basisregisters.Auth.AcmIdm;
-using Be.Vlaanderen.Basisregisters.DockerUtilities;
-using Ductus.FluentDocker.Services;
 using IdentityModel;
 using IdentityModel.Client;
 using Infrastructure;
@@ -20,14 +19,6 @@ using Newtonsoft.Json;
 using Npgsql;
 using Xunit;
 
-[CollectionDefinition("NotificationServiceCollection")]
-public class NotificationServiceCollection : ICollectionFixture<NotificationServiceTestFixture>
-{
-    // This class has no code, and is never created. Its purpose is simply
-    // to be the place to apply [CollectionDefinition] and all the
-    // ICollectionFixture<> interfaces.
-}
-
 public class NotificationServiceTestFixture : IAsyncLifetime
 {
     internal const string RequiredScopes = $"{Scopes.DvArAdresUitzonderingen} {Scopes.DvGrGeschetstgebouwUitzonderingen} {Scopes.DvGrIngemetengebouwUitzonderingen} {Scopes.DvWrUitzonderingenBeheer}";
@@ -35,7 +26,6 @@ public class NotificationServiceTestFixture : IAsyncLifetime
     private string _clientId;
     private string _clientSecret;
     private readonly IDictionary<string, AccessToken> _accessTokens = new Dictionary<string, AccessToken>();
-    private ICompositeService _docker;
 
     public TestServer TestServer { get; private set; }
 
@@ -43,20 +33,23 @@ public class NotificationServiceTestFixture : IAsyncLifetime
     {
         JsonConvert.DefaultSettings = new JsonSerializerSettings().ConfigureDefaultForApi;
 
-        var configuration = new ConfigurationBuilder()
+        var configurationBuilder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
             .AddJsonFile($"appsettings.{Environment.MachineName.ToLowerInvariant()}.json", optional: true, reloadOnChange: false)
-            .AddEnvironmentVariables()
-            .Build();
+            .AddEnvironmentVariables();
 
-        _clientId = configuration.GetValue<string>("ClientId")!;
-        _clientSecret = configuration.GetValue<string>("ClientSecret")!;
+        var databaseName = $"notifications-{Guid.NewGuid():N}";
+        var connectionString = configurationBuilder.Build().GetConnectionString("Marten")!;
 
-        // start postgres
-        _docker = DockerComposer.Compose("postgres_test.yml", "notification-service-integration-tests");
+        await CreateDatabase(connectionString, databaseName);
 
-        await CreateDatabase(configuration.GetConnectionString("Marten")!, "notifications");
+        connectionString = string.Join(';', connectionString
+            .Split(';')
+            .Where(x => !x.StartsWith("Database=", StringComparison.InvariantCultureIgnoreCase))
+            .Concat([$"Database={databaseName}"]));
+        configurationBuilder.AddInMemoryCollection([new("ConnectionStrings:Marten", connectionString)]);
+        var configuration = configurationBuilder.Build();
 
         var hostBuilder = new WebHostBuilder()
             .UseConfiguration(configuration)
@@ -64,6 +57,8 @@ public class NotificationServiceTestFixture : IAsyncLifetime
             .ConfigureLogging(loggingBuilder => loggingBuilder.AddConsole())
             .UseTestServer();
 
+        _clientId = configuration.GetValue<string>("ClientId")!;
+        _clientSecret = configuration.GetValue<string>("ClientSecret")!;
         TestServer = new TestServer(hostBuilder);
     }
 
@@ -93,19 +88,18 @@ public class NotificationServiceTestFixture : IAsyncLifetime
 
     public Task DisposeAsync()
     {
-        _docker.Dispose();
         return Task.CompletedTask;
     }
 
     private async Task CreateDatabase(string connectionString, string database)
     {
-        var createDbQuery = $"CREATE DATABASE \"{database}\"";
+        var createDbQuery = $"CREATE DATABASE \"{database}\";";
 
         await using var connection = new NpgsqlConnection(connectionString);
         await using var command = new NpgsqlCommand(createDbQuery, connection);
 
         var attempt = 1;
-        while (attempt <= 5)
+        while (true)
         {
             try
             {
@@ -114,6 +108,11 @@ public class NotificationServiceTestFixture : IAsyncLifetime
             }
             catch
             {
+                if (attempt == 5)
+                {
+                    throw;
+                }
+
                 attempt++;
                 await Task.Delay(TimeSpan.FromMilliseconds(200));
             }

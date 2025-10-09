@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-public interface INotifications
+public interface INotificationsRepository
 {
     Task<int> CreateNotification(
         DateTimeOffset? validFrom,
@@ -25,7 +25,12 @@ public interface INotifications
 
     Task DeleteNotification(int notificationId, CancellationToken cancellationToken = default);
 
-    Task<IReadOnlyList<Notification>> GetNotifications(CancellationToken cancellationToken = default);
-
     Task<IReadOnlyList<Notification>> GetActiveNotifications(string platform, CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<Notification>> GetNotifications(
+        NotificationStatus? status = null,
+        DateTimeOffset? validFrom = null,
+        DateTimeOffset? validTo = null,
+        int limit = 100,
+        CancellationToken cancellationToken = default);
 }

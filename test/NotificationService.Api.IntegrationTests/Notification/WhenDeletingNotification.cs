@@ -10,8 +10,8 @@ using Newtonsoft.Json;
 using NotificationService.Api.Abstractions;
 using Xunit;
 
-[Collection("NotificationServiceCollection")]
-public class WhenDeletingNotification
+[Collection("DockerFixtureCollection")]
+public class WhenDeletingNotification : IClassFixture<NotificationServiceTestFixture>
 {
     private readonly NotificationServiceTestFixture _fixture;
 

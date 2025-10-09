@@ -1,6 +1,6 @@
 namespace NotificationService.Notification;
 
-public enum Status
+public enum NotificationStatus
 {
     Draft,
     Published,

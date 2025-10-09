@@ -23,12 +23,12 @@ public partial class NotificationsController
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = PolicyNames.WegenUitzonderingen.Beheerder)]
     public async Task<IActionResult> Publish(
         [FromRoute] int id,
-        [FromServices] INotifications notifications,
+        [FromServices] INotificationsRepository notificationsRepository,
         CancellationToken cancellationToken)
     {
         try
         {
-            await notifications.PublishNotification(id, cancellationToken);
+            await notificationsRepository.PublishNotification(id, cancellationToken);
             return NoContent();
         }
         catch (NotificationNotFoundException)

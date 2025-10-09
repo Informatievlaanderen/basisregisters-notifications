@@ -26,12 +26,12 @@ public partial class NotificationsController
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = PolicyNames.WegenUitzonderingen.Beheerder)]
     public async Task<IActionResult> Delete(
         [FromRoute] int id,
-        [FromServices] INotifications notifications,
+        [FromServices] INotificationsRepository notificationsRepository,
         CancellationToken cancellationToken)
     {
         try
         {
-            await notifications.DeleteNotification(id, cancellationToken);
+            await notificationsRepository.DeleteNotification(id, cancellationToken);
             return NoContent();
         }
         catch (NotificationNotFoundException)
