@@ -6,7 +6,6 @@
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
     <ServerGarbageCollection>true</ServerGarbageCollection>
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
-    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -19,6 +18,10 @@
     <NoWarn>1701;1702;1705;1591</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Include="Dockerfile" CopyToOutputDirectory="Always" />
     <Content Include="appsettings.json" CopyToOutputDirectory="Always" />
@@ -29,17 +32,23 @@
     <InternalsVisibleTo Include="NotificationService.Api.IntegrationTests" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NotificationService.Abstractions\NotificationService.Abstractions.csproj" />
+    <ProjectReference Include="..\NotificationService.Api.Abstractions\NotificationService.Api.Abstractions.csproj" />
     <ProjectReference Include="..\NotificationService\NotificationService.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Middleware.AddVersionHeader" />
+    <PackageReference Include="Be.Vlaanderen.Basisregisters.Auth.AcmIdm" />
+    <PackageReference Include="Be.Vlaanderen.Basisregisters.Api" />
+
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="SwashBuckle.AspNetCore.Swagger" />
     <PackageReference Include="SwashBuckle.AspNetCore.SwaggerGen" />
     <PackageReference Include="SwashBuckle.AspNetCore.SwaggerUI" />
-    <PackageReference Include="Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Middleware.AddVersionHeader" />
+    <PackageReference Include="Destructurama.JsonNet" />
+    <PackageReference Include="FluentValidation" />
+    
     <PackageReference Include="Datadog.Trace.Bundle" />
     <PackageReference Include="Serilog" />
     <PackageReference Include="Serilog.Settings.Configuration" />
@@ -49,6 +58,8 @@
     <PackageReference Include="Serilog.Enrichers.Thread" />
     <PackageReference Include="Serilog.Enrichers.Environment" />
     <PackageReference Include="Serilog.Formatting.Compact" />
-    <PackageReference Include="Destructurama.JsonNet" />
+
+    <PackageReference Include="SourceLink.Embed.AllSourceFiles" PrivateAssets="all" />
+    <PackageReference Include="SourceLink.Copy.PdbFiles" PrivateAssets="all" />
   </ItemGroup>
 </Project>
