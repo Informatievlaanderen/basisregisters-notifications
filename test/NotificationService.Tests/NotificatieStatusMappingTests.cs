@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using Api.Abstractions;
+using Api.Mapping;
 using FluentAssertions;
 using Notification;
 using Xunit;

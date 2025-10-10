@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using Notification;
 
 public sealed class Notificatie
 {
@@ -43,24 +42,3 @@ public sealed class Notificatie
 }
 
 public record NotificatieLink(string Label, string Url);
-
-public static class NotificatieExtensions
-{
-    public static Notificatie MapToNotificatie(this Notification notification)
-    {
-        return new Notificatie
-        {
-            NotificatieId = notification.NotificationId,
-            Status = notification.Status.MapToNotificatieStatus(),
-            GeldigVanaf = notification.ValidFrom,
-            GeldigTot = notification.ValidTo,
-            Ernst = notification.Severity.MapToErnst(),
-            Titel = notification.Title,
-            Inhoud = notification.BodyMd,
-            Platformen = notification.Platforms.Select(Enum.Parse<Platform>).ToList(),
-            Rollen = notification.Roles.Select(Enum.Parse<Rol>).ToList(),
-            KanSluiten = notification.CanClose,
-            Links = notification.Links.Select(l => new NotificatieLink(l.Label, l.Url)).ToList()
-        };
-    }
-}

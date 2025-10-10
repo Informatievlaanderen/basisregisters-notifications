@@ -28,8 +28,4 @@
     <PackageReference Include="SourceLink.Embed.AllSourceFiles" PrivateAssets="all" />
     <PackageReference Include="SourceLink.Copy.PdbFiles" PrivateAssets="all" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\NotificationService\NotificationService.csproj" />
-  </ItemGroup>
 </Project>

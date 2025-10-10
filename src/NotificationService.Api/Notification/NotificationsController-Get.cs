@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Abstractions;
 using Be.Vlaanderen.Basisregisters.Auth.AcmIdm;
 using FluentValidation;
+using Mapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
