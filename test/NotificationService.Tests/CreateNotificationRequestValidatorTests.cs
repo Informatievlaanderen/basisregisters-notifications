@@ -119,7 +119,7 @@ public sealed class CreateNotificationRequestValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor($"{nameof(maakNotificatieRequest.GeldigVanaf)}")
-            .WithErrorMessage("'GeldigVanaf' moet vroeger of gelijk zijn aan 'GeldigTot'.")
+            .WithErrorMessage("'GeldigVanaf' moet vroeger zijn dan 'GeldigTot'.")
             .WithErrorCode("A");
     }
 

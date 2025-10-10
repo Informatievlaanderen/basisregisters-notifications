@@ -52,7 +52,6 @@ public class CreateNotificationRequestValidator : AbstractValidator<MaakNotifica
 {
     public CreateNotificationRequestValidator()
     {
-        //TODO-pr: add errorcodes
         RuleFor(x => x.Titel)
             .NotEmpty()
             .WithMessage(ValidationErrors.CreateNotification.TitelIsRequired.Message)
@@ -60,31 +59,31 @@ public class CreateNotificationRequestValidator : AbstractValidator<MaakNotifica
 
         RuleFor(x => x.Inhoud)
             .NotEmpty()
-            .WithMessage("'Inhoud' mag niet leeg zijn.")
-            .WithErrorCode("A");
+            .WithMessage(ValidationErrors.CreateNotification.InhoudIsRequired.Message)
+            .WithErrorCode(ValidationErrors.CreateNotification.InhoudIsRequired.Code);
 
         RuleFor(x => x.Platformen)
             .NotEmpty()
-            .WithMessage("'Platformen' mag niet leeg zijn.")
-            .WithErrorCode("A");
+            .WithMessage(ValidationErrors.CreateNotification.PlatformenIsRequired.Message)
+            .WithErrorCode(ValidationErrors.CreateNotification.PlatformenIsRequired.Code);
 
         RuleFor(x => x.Rollen)
             .NotEmpty()
-            .WithMessage("'Rollen' mag niet leeg zijn.")
-            .WithErrorCode("A");
+            .WithMessage(ValidationErrors.CreateNotification.RollenIsRequired.Message)
+            .WithErrorCode(ValidationErrors.CreateNotification.RollenIsRequired.Code);
 
         When(x => x.GeldigTot.HasValue, () =>
         {
             RuleFor(x => x.GeldigTot)
                 .GreaterThan(DateTimeOffset.Now)
-                .WithMessage("'GeldigTot' moet in de toekomst liggen.")
-                .WithErrorCode("A");
+                .WithMessage(ValidationErrors.CreateNotification.GeldigTotMustBeInTheFuture.Message)
+                .WithErrorCode(ValidationErrors.CreateNotification.GeldigTotMustBeInTheFuture.Code);
 
             When(x => x.GeldigVanaf.HasValue, () =>
                 RuleFor(x => x.GeldigVanaf)
                     .LessThanOrEqualTo(x => x.GeldigTot)
-                    .WithMessage("'GeldigVanaf' moet vroeger of gelijk zijn aan 'GeldigTot'.")
-                    .WithErrorCode("A")
+                    .WithMessage(ValidationErrors.CreateNotification.GeldigVanafMustBeBeforeGeldigTot.Message)
+                    .WithErrorCode(ValidationErrors.CreateNotification.GeldigVanafMustBeBeforeGeldigTot.Code)
             );
         });
 
@@ -99,18 +98,18 @@ public class LinkValidator : AbstractValidator<MaakNotificatieLink>
     {
         RuleFor(x => x.Label)
             .NotEmpty()
-            .WithMessage("'Label' mag niet leeg zijn.")
-            .WithErrorCode("A")
+            .WithMessage(ValidationErrors.CreateNotification.LinkLabelIsRequired.Message)
+            .WithErrorCode(ValidationErrors.CreateNotification.LinkLabelIsRequired.Code)
             .MaximumLength(100)
-            .WithMessage("'Label' mag maximaal 100 karakters bevatten.")
-            .WithErrorCode("A");
+            .WithMessage(ValidationErrors.CreateNotification.LinkLabelIsTooLong.Message)
+            .WithErrorCode(ValidationErrors.CreateNotification.LinkLabelIsTooLong.Code);
 
         RuleFor(x => x.Url)
             .NotEmpty()
-            .WithMessage("'Url' mag niet leeg zijn.")
-            .WithErrorCode("A")
+            .WithMessage(ValidationErrors.CreateNotification.LinkUrlIsRequired.Message)
+            .WithErrorCode(ValidationErrors.CreateNotification.LinkUrlIsRequired.Code)
             .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute))
-            .WithMessage("'Url' moet een geldige URL zijn.")
-            .WithErrorCode("A");
+            .WithMessage(ValidationErrors.CreateNotification.LinkUrlIsInvalid.Message)
+            .WithErrorCode(ValidationErrors.CreateNotification.LinkUrlIsInvalid.Code);
     }
 }

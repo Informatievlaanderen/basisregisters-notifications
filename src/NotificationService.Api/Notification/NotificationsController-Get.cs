@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NotificationService.Notification;
+using Validation;
 
 public partial class NotificationsController
 {
@@ -61,11 +62,10 @@ public partial class NotificationsController
         {
             When(x => x.Vanaf is not null && x.Tot is not null, () =>
             {
-                //TODO-pr: add errorcodes
                 RuleFor(x => x.Tot)
                     .GreaterThan(x => x.Vanaf)
-                    .WithMessage("'tot' moet groter zijn dan 'vanaf'.")
-                    .WithErrorCode("A");
+                    .WithMessage(ValidationErrors.Get.VanafMustBeBeforeTot.Message)
+                    .WithErrorCode(ValidationErrors.Get.VanafMustBeBeforeTot.Code);
             });
         }
     }

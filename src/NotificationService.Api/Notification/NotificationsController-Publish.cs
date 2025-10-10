@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NotificationService.Notification;
 using NotificationService.Notification.Exceptions;
+using Validation;
 
 public partial class NotificationsController
 {
@@ -33,7 +34,7 @@ public partial class NotificationsController
         }
         catch (NotificationNotFoundException)
         {
-            throw new ApiException("Notificatie niet gevonden", StatusCodes.Status404NotFound);
+            throw new ApiException(ValidationErrors.Common.NotFound.Message, StatusCodes.Status404NotFound);
         }
     }
 }
