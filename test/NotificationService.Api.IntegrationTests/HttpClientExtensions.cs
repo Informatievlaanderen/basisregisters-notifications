@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Abstractions;
+using Api.Notification;
 using FluentAssertions;
 using Newtonsoft.Json;
 
@@ -23,6 +24,24 @@ internal static class HttpClientExtensions
         var createResult = JsonConvert.DeserializeObject<NotificatieAangemaakt>(await response.Content.ReadAsStringAsync());
         createResult.Should().NotBeNull();
         return createResult!;
+    }
+
+    public static async Task<Notificatie[]> GetNotificaties(this HttpClient client, NotificationsFilter? filter = null)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, "v1/notificaties");
+        if (filter is not null)
+        {
+            request.Headers.Add("X-Filtering", JsonConvert.SerializeObject(filter));
+        }
+
+        var response = await client.SendAsync(request);
+        response.Should().BeSuccessful();
+
+        // Assert
+        var notifications = JsonConvert.DeserializeObject<Notificatie[]>(await response.Content.ReadAsStringAsync());
+        notifications.Should().NotBeNull();
+
+        return notifications!;
     }
 
     public static Task PubliceerNotificatie(this HttpClient client, int notificationId) =>

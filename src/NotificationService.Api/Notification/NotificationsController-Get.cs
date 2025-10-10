@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Abstractions;
+using Be.Vlaanderen.Basisregisters.Api.Search.Filtering;
 using Be.Vlaanderen.Basisregisters.Auth.AcmIdm;
 using FluentValidation;
 using Mapping;
@@ -26,23 +27,20 @@ public partial class NotificationsController
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = PolicyNames.IngemetenGebouw.InterneBijwerker)]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = PolicyNames.WegenUitzonderingen.Beheerder)]
     public async Task<IActionResult> GetNotifications(
-        [FromQuery] NotificatieStatus? status,
-        [FromQuery] DateTimeOffset? vanaf,
-        [FromQuery] DateTimeOffset? tot,
-        [FromServices] GetNotificationsRequestValidator validator,
+        [FromServices] NotificationsFilterValidator validator,
         [FromServices] INotificationsRepository notificationsRepository,
         CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(new()
+        var request = Request.ExtractFilteringRequest<NotificationsFilter>();
+        if (request.Filter is not null)
         {
-            Vanaf = vanaf,
-            Tot = tot
-        }, cancellationToken);
+            await validator.ValidateAndThrowAsync(request.Filter, cancellationToken);
+        }
 
         var result = await notificationsRepository.GetNotifications(
-            status: status?.MapToNotificationStatus(),
-            validFrom: vanaf,
-            validTo: tot,
+            status: request.Filter?.Status?.MapToNotificationStatus(),
+            validFrom: request.Filter?.Vanaf,
+            validTo: request.Filter?.Tot,
             cancellationToken: cancellationToken);
 
         var notificaties = result
@@ -51,23 +49,24 @@ public partial class NotificationsController
 
         return Ok(notificaties);
     }
+}
 
-    public class GetNotificationsParameters
+public class NotificationsFilter
+{
+    public NotificatieStatus? Status { get; init; }
+    public DateTimeOffset? Vanaf { get; init; }
+    public DateTimeOffset? Tot { get; init; }
+}
+public class NotificationsFilterValidator : AbstractValidator<NotificationsFilter>
+{
+    public NotificationsFilterValidator()
     {
-        public required DateTimeOffset? Vanaf { get; init; }
-        public required DateTimeOffset? Tot { get; init; }
-    }
-    public class GetNotificationsRequestValidator : AbstractValidator<GetNotificationsParameters>
-    {
-        public GetNotificationsRequestValidator()
+        When(x => x.Vanaf is not null && x.Tot is not null, () =>
         {
-            When(x => x.Vanaf is not null && x.Tot is not null, () =>
-            {
-                RuleFor(x => x.Tot)
-                    .GreaterThan(x => x.Vanaf)
-                    .WithMessage(ValidationErrors.Get.VanafMustBeBeforeTot.Message)
-                    .WithErrorCode(ValidationErrors.Get.VanafMustBeBeforeTot.Code);
-            });
-        }
+            RuleFor(x => x.Tot)
+                .GreaterThan(x => x.Vanaf)
+                .WithMessage(ValidationErrors.Get.VanafMustBeBeforeTot.Message)
+                .WithErrorCode(ValidationErrors.Get.VanafMustBeBeforeTot.Code);
+        });
     }
 }

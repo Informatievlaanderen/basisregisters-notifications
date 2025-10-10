@@ -1,14 +1,12 @@
 namespace NotificationService.Api.IntegrationTests.Notification;
 
 using System;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using Abstractions;
+using Api.Notification;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using NotificationService.Notification;
 using Xunit;
 
@@ -34,25 +32,22 @@ public class WhenGettingNotifications: IClassFixture<NotificationServiceTestFixt
         await CreateNotification(DateTimeOffset.Now.AddDays(-1));
 
         // Act
-        var response = await client.GetAsync("v1/notificaties");
-        response.Should().BeSuccessful();
+        var notifications = await client.GetNotificaties();
 
         // Assert
-        var notifications = JsonConvert.DeserializeObject<Notificatie[]>(await response.Content.ReadAsStringAsync());
-        notifications.Should().NotBeNull();
         notifications.Should().NotBeEmpty();
 
-        for (var i = 0; i < notifications!.Length - 1; i++)
+        for (var i = 0; i < notifications.Length - 1; i++)
         {
             notifications[i].GeldigVanaf.Should().BeOnOrAfter(notifications[i + 1].GeldigVanaf);
         }
     }
 
     [Theory]
-    [InlineData("Concept")]
-    [InlineData("Gepubliceerd")]
-    [InlineData("Ingetrokken")]
-    public async Task WithStatusFilter_ReturnsNotificationsWithSpecificStatus(string statusFilter)
+    [InlineData(NotificatieStatus.Concept)]
+    [InlineData(NotificatieStatus.Gepubliceerd)]
+    [InlineData(NotificatieStatus.Ingetrokken)]
+    public async Task WithStatusFilter_ReturnsNotificationsWithSpecificStatus(NotificatieStatus statusFilter)
     {
         // Arrange
         var client = _fixture.TestServer.CreateClient();
@@ -66,16 +61,17 @@ public class WhenGettingNotifications: IClassFixture<NotificationServiceTestFixt
         await client.NotificatieIntrekken(unpublishedNotificationId);
 
         // Act
-        var response = await client.GetAsync($"v1/notificaties?status={statusFilter.ToLower()}");
-        response.Should().BeSuccessful();
+        var notifications = await client.GetNotificaties(new NotificationsFilter
+        {
+            Status = statusFilter
+        });
 
         // Assert
-        var notifications = JsonConvert.DeserializeObject<Notificatie[]>(await response.Content.ReadAsStringAsync());
         notifications.Should().NotBeEmpty();
 
-        foreach (var notification in notifications!)
+        foreach (var notification in notifications)
         {
-            notification.Status.ToString().Should().Be(statusFilter);
+            notification.Status.Should().Be(statusFilter);
         }
     }
 
@@ -92,14 +88,15 @@ public class WhenGettingNotifications: IClassFixture<NotificationServiceTestFixt
         await CreateNotification(DateTimeOffset.Now);
 
         // Act
-        var response = await client.GetAsync($"v1/notificaties?vanaf={filterDate:yyyy-MM-ddTHH:mm:ssZ}");
-        response.Should().BeSuccessful();
+        var notifications = await client.GetNotificaties(new NotificationsFilter
+        {
+            Vanaf = filterDate
+        });
 
         // Assert
-        var notifications = JsonConvert.DeserializeObject<Notificatie[]>(await response.Content.ReadAsStringAsync());
         notifications.Should().NotBeNull();
 
-        foreach (var notification in notifications!)
+        foreach (var notification in notifications)
         {
             notification.GeldigVanaf.Should().BeOnOrAfter(filterDate);
         }
@@ -118,14 +115,15 @@ public class WhenGettingNotifications: IClassFixture<NotificationServiceTestFixt
         await CreateNotification(DateTimeOffset.Now, filterDate.AddDays(1));
 
         // Act
-        var response = await client.GetAsync($"v1/notificaties?tot={filterDate:yyyy-MM-ddTHH:mm:ssZ}");
-        response.Should().BeSuccessful();
+        var notifications = await client.GetNotificaties(new NotificationsFilter
+        {
+            Tot = filterDate
+        });
 
         // Assert
-        var notifications = JsonConvert.DeserializeObject<Notificatie[]>(await response.Content.ReadAsStringAsync());
         notifications.Should().NotBeNull();
 
-        foreach (var notification in notifications!)
+        foreach (var notification in notifications)
         {
             notification.GeldigTot.Should().BeOnOrBefore(filterDate);
         }

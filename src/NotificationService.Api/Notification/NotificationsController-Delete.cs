@@ -16,7 +16,7 @@ using Validation;
 
 public partial class NotificationsController
 {
-    [HttpDelete("{id}")]
+    [HttpPost("{id}/acties/verwijderen")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -39,9 +39,9 @@ public partial class NotificationsController
         {
             throw new ApiException(ValidationErrors.Common.NotFound.Message, StatusCodes.Status404NotFound);
         }
-        catch (NotificationHasInvalidStatusException)
+        catch (NotificationStatusIsNotDraftException ex)
         {
-            throw new ValidationException([new ValidationFailure(string.Empty, ValidationErrors.Common.InvalidStatus.Message) { ErrorCode = ValidationErrors.Common.InvalidStatus.Code }]);
+            throw new ValidationException([new ValidationFailure(string.Empty, ValidationErrors.DeleteNotification.StatusInvalid.ToMessage(ex.CurrentStatus)) { ErrorCode = ValidationErrors.DeleteNotification.StatusInvalid.Code }]);
         }
     }
 }

@@ -45,7 +45,7 @@ public class WhenDeletingNotification : IClassFixture<NotificationServiceTestFix
         var notificationId = createResult!.NotificatieId;
 
         // Delete notification
-        var deleteResponse = await client.DeleteAsync($"v1/notificaties/{notificationId}");
+        var deleteResponse = await client.PostAsync($"v1/notificaties/{notificationId}/acties/verwijderen", null);
 
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
@@ -59,7 +59,7 @@ public class WhenDeletingNotification : IClassFixture<NotificationServiceTestFix
         var invalidNotificationId = 999999;
 
         // Try to delete non-existent notification
-        var deleteResponse = await client.DeleteAsync($"v1/notificaties/{invalidNotificationId}");
+        var deleteResponse = await client.PostAsync($"v1/notificaties/{invalidNotificationId}/acties/verwijderen", null);
 
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
@@ -93,7 +93,7 @@ public class WhenDeletingNotification : IClassFixture<NotificationServiceTestFix
         publishResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // Try to delete published notification (should fail)
-        var deleteResponse = await client.DeleteAsync($"v1/notificaties/{notificationId}");
+        var deleteResponse = await client.PostAsync($"v1/notificaties/{notificationId}/acties/verwijderen", null);
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
@@ -130,7 +130,7 @@ public class WhenDeletingNotification : IClassFixture<NotificationServiceTestFix
         unpublishResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // Try to delete unpublished notification (should fail)
-        var deleteResponse = await client.DeleteAsync($"v1/notificaties/{notificationId}");
+        var deleteResponse = await client.PostAsync($"v1/notificaties/{notificationId}/acties/verwijderen", null);
 
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }

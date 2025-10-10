@@ -60,7 +60,7 @@ public class MartenNotificationsRepository : INotificationsRepository
 
         if (notification is null)
         {
-            throw new NotificationNotFoundException(notificationId);
+            throw new NotificationNotFoundException();
         }
 
         notification.Status = NotificationStatus.Published;
@@ -78,12 +78,12 @@ public class MartenNotificationsRepository : INotificationsRepository
 
         if (notification is null)
         {
-            throw new NotificationNotFoundException(notificationId);
+            throw new NotificationNotFoundException();
         }
 
         if (notification.Status != NotificationStatus.Published)
         {
-            throw new NotificationHasInvalidStatusException(notificationId, notification.Status, NotificationStatus.Published);
+            throw new NotificationStatusIsNotPublishedException(notification.Status);
         }
 
         notification.Status = NotificationStatus.Unpublished;
@@ -101,26 +101,16 @@ public class MartenNotificationsRepository : INotificationsRepository
 
         if (notification is null)
         {
-            throw new NotificationNotFoundException(notificationId);
+            throw new NotificationNotFoundException();
         }
 
         if (notification.Status != NotificationStatus.Draft)
         {
-            throw new NotificationHasInvalidStatusException(notificationId, notification.Status, NotificationStatus.Draft);
+            throw new NotificationStatusIsNotDraftException(notification.Status);
         }
 
         session.Delete(notification);
         await session.SaveChangesAsync(cancellationToken);
-    }
-
-    public async Task<IReadOnlyList<Notification>> GetNotifications(CancellationToken cancellationToken)
-    {
-        await using var session = _store.QuerySession();
-
-        var notifications = await session.Query<Notification>()
-            .ToListAsync(cancellationToken);
-
-        return notifications;
     }
 
     public async Task<IReadOnlyList<Notification>> GetActiveNotifications(string platform, CancellationToken cancellationToken)

@@ -39,9 +39,9 @@ public partial class NotificationsController
         {
             throw new ApiException(ValidationErrors.Common.NotFound.Message, StatusCodes.Status404NotFound);
         }
-        catch (NotificationHasInvalidStatusException)
+        catch (NotificationStatusIsNotPublishedException ex)
         {
-            throw new ValidationException([new ValidationFailure(string.Empty, ValidationErrors.Common.InvalidStatus.Message) { ErrorCode = ValidationErrors.Common.InvalidStatus.Code }]);
+            throw new ValidationException([new ValidationFailure(string.Empty, ValidationErrors.UnpublishNotification.StatusInvalid.ToMessage(ex.CurrentStatus)) { ErrorCode = ValidationErrors.UnpublishNotification.StatusInvalid.Code }]);
         }
     }
 }

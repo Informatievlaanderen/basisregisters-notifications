@@ -29,15 +29,6 @@ public static class ServiceCollectionExtensions
                 serializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
                 serializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
             });
-
-            // options.CreateDatabasesForTenants(options =>
-            // {
-            //     var dbName = connectionString.Split(";")
-            //         .Where(x => x.StartsWith("Database="))
-            //         .Select(x => x.Substring("Database=".Length))
-            //         .FirstOrDefault();
-            //     options.ForTenant(dbName ?? "notifications");
-            // });
         });
 
         services.AddSingleton<INotificationsRepository, MartenNotificationsRepository>();

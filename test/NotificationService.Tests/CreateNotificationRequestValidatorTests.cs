@@ -34,7 +34,7 @@ public sealed class CreateNotificationRequestValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor($"{nameof(maakNotificatieRequest.Titel)}")
             .WithErrorMessage("'Titel' mag niet leeg zijn.")
-            .WithErrorCode("A");
+            .WithErrorCode("NotificatieTitelVerplicht");
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public sealed class CreateNotificationRequestValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor($"{nameof(maakNotificatieRequest.Inhoud)}")
             .WithErrorMessage("'Inhoud' mag niet leeg zijn.")
-            .WithErrorCode("A");
+            .WithErrorCode("NotificatieInhoudVerplicht");
     }
 
     [Fact]
@@ -68,7 +68,7 @@ public sealed class CreateNotificationRequestValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor($"{nameof(maakNotificatieRequest.Platformen)}")
             .WithErrorMessage("'Platformen' mag niet leeg zijn.")
-            .WithErrorCode("A");
+            .WithErrorCode("NotificatiePlatformenVerplicht");
     }
 
     [Fact]
@@ -85,7 +85,7 @@ public sealed class CreateNotificationRequestValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor($"{nameof(maakNotificatieRequest.Rollen)}")
             .WithErrorMessage("'Rollen' mag niet leeg zijn.")
-            .WithErrorCode("A");
+            .WithErrorCode("NotificatieRollenVerplicht");
     }
 
     [Fact]
@@ -102,7 +102,7 @@ public sealed class CreateNotificationRequestValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor($"{nameof(maakNotificatieRequest.GeldigTot)}")
             .WithErrorMessage("'GeldigTot' moet in de toekomst liggen.")
-            .WithErrorCode("A");
+            .WithErrorCode("NotificatieGeldigTotToekomst");
     }
 
     [Fact]
@@ -120,7 +120,7 @@ public sealed class CreateNotificationRequestValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor($"{nameof(maakNotificatieRequest.GeldigVanaf)}")
             .WithErrorMessage("'GeldigVanaf' moet vroeger zijn dan 'GeldigTot'.")
-            .WithErrorCode("A");
+            .WithErrorCode("NotificatieGeldigVanafVoorGeldigTot");
     }
 
     [Fact]
@@ -140,7 +140,7 @@ public sealed class CreateNotificationRequestValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor($"{nameof(maakNotificatieRequest.Links)}[0].{nameof(link.Label)}")
             .WithErrorMessage("'Label' mag niet leeg zijn.")
-            .WithErrorCode("A");
+            .WithErrorCode("NotificatieLinkLabelVerplicht");
     }
 
     [Fact]
@@ -160,7 +160,7 @@ public sealed class CreateNotificationRequestValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor($"{nameof(maakNotificatieRequest.Links)}[0].{nameof(link.Label)}")
             .WithErrorMessage("'Label' mag maximaal 100 karakters bevatten.")
-            .WithErrorCode("A");
+            .WithErrorCode("NotificatieLabelTeLang");
     }
 
     [Fact]
@@ -180,7 +180,7 @@ public sealed class CreateNotificationRequestValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor($"{nameof(maakNotificatieRequest.Links)}[0].{nameof(link.Url)}")
             .WithErrorMessage("'Url' mag niet leeg zijn.")
-            .WithErrorCode("A");
+            .WithErrorCode("NotificatieLinkUrlVerplicht");
     }
 
     [Fact]
@@ -200,6 +200,6 @@ public sealed class CreateNotificationRequestValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor($"{nameof(maakNotificatieRequest.Links)}[0].{nameof(link.Url)}")
             .WithErrorMessage("'Url' moet een geldige URL zijn.")
-            .WithErrorCode("A");
+            .WithErrorCode("NotificatieLinkUrlOngeldig");
     }
 }
