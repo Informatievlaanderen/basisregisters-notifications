@@ -27,7 +27,7 @@ public partial class NotificationsController
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = PolicyNames.WegenUitzonderingen.Beheerder)]
     public async Task<IActionResult> Create(
         [FromBody] MaakNotificatieRequest request,
-        [FromServices] CreateNotificationRequestValidator validator,
+        [FromServices] MaakNotificatieRequestValidator validator,
         [FromServices] INotificationsRepository notificationsRepository,
         CancellationToken cancellationToken)
     {
@@ -49,9 +49,9 @@ public partial class NotificationsController
     }
 }
 
-public class CreateNotificationRequestValidator : AbstractValidator<MaakNotificatieRequest>
+public class MaakNotificatieRequestValidator : AbstractValidator<MaakNotificatieRequest>
 {
-    public CreateNotificationRequestValidator()
+    public MaakNotificatieRequestValidator()
     {
         RuleFor(x => x.Titel)
             .NotEmpty()
@@ -89,13 +89,13 @@ public class CreateNotificationRequestValidator : AbstractValidator<MaakNotifica
         });
 
         RuleForEach(x => x.Links)
-            .SetValidator(new LinkValidator());
+            .SetValidator(new MaakNotificatieLinkValidator());
     }
 }
 
-public class LinkValidator : AbstractValidator<MaakNotificatieLink>
+public class MaakNotificatieLinkValidator : AbstractValidator<MaakNotificatieLink>
 {
-    public LinkValidator()
+    public MaakNotificatieLinkValidator()
     {
         RuleFor(x => x.Label)
             .NotEmpty()

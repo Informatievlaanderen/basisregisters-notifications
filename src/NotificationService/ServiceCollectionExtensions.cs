@@ -27,7 +27,7 @@ public static class ServiceCollectionExtensions
             {
                 serializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
                 serializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-                serializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+                serializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never; // Important for serializing default Enum values
             });
         });
 

@@ -41,7 +41,12 @@ public partial class NotificationsController
         }
         catch (NotificationStatusIsNotPublishedException ex)
         {
-            throw new ValidationException([new ValidationFailure(string.Empty, ValidationErrors.UnpublishNotification.StatusInvalid.ToMessage(ex.CurrentStatus)) { ErrorCode = ValidationErrors.UnpublishNotification.StatusInvalid.Code }]);
+            throw new ValidationException([new ValidationFailure
+            {
+                PropertyName = string.Empty,
+                ErrorCode = ValidationErrors.UnpublishNotification.StatusInvalid.Code,
+                ErrorMessage = ValidationErrors.UnpublishNotification.StatusInvalid.ToMessage(ex.CurrentStatus)
+            }]);
         }
     }
 }

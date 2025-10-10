@@ -8,15 +8,15 @@ using AutoFixture;
 using FluentValidation.TestHelper;
 using Xunit;
 
-public sealed class CreateNotificationRequestValidatorTests
+public sealed class MaakNotificatieRequestValidatorTests
 {
-    private readonly CreateNotificationRequestValidator _validator;
+    private readonly MaakNotificatieRequestValidator _validator;
     private readonly Fixture _fixture;
 
 
-    public CreateNotificationRequestValidatorTests()
+    public MaakNotificatieRequestValidatorTests()
     {
-        _validator = new CreateNotificationRequestValidator();
+        _validator = new MaakNotificatieRequestValidator();
         _fixture = new Fixture();
     }
 

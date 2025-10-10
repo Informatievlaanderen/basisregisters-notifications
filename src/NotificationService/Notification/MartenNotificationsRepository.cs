@@ -155,7 +155,6 @@ public class MartenNotificationsRepository : INotificationsRepository
             query = query.Where(x => x.ValidTo <= validTo.Value);
         }
 
-        // Sort by ValidFrom descending and limit records
         var notifications = await query
             .OrderByDescending(x => x.ValidFrom)
             .ThenByDescending(x => x.ValidTo)

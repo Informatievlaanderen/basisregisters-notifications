@@ -41,7 +41,12 @@ public partial class NotificationsController
         }
         catch (NotificationStatusIsNotDraftException ex)
         {
-            throw new ValidationException([new ValidationFailure(string.Empty, ValidationErrors.DeleteNotification.StatusInvalid.ToMessage(ex.CurrentStatus)) { ErrorCode = ValidationErrors.DeleteNotification.StatusInvalid.Code }]);
+            throw new ValidationException([new ValidationFailure
+            {
+                PropertyName = string.Empty,
+                ErrorCode = ValidationErrors.DeleteNotification.StatusInvalid.Code,
+                ErrorMessage = ValidationErrors.DeleteNotification.StatusInvalid.ToMessage(ex.CurrentStatus)
+            }]);
         }
     }
 }
