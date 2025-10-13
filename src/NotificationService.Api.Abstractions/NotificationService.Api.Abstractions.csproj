@@ -27,5 +27,6 @@
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="SourceLink.Embed.AllSourceFiles" PrivateAssets="all" />
     <PackageReference Include="SourceLink.Copy.PdbFiles" PrivateAssets="all" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Filters.Abstractions" />
   </ItemGroup>
 </Project>

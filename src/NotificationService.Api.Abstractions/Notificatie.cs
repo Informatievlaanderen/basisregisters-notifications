@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Filters;
 
 public sealed class Notificatie
 {
@@ -42,3 +43,27 @@ public sealed class Notificatie
 }
 
 public record NotificatieLink(string Label, string Url);
+
+public class GetNotificatiesResponseExample : IExamplesProvider<Notificatie[]>
+{
+    public Notificatie[] GetExamples()
+    {
+        return
+        [
+            new Notificatie
+            {
+                NotificatieId = 1,
+                Status = NotificatieStatus.Gepubliceerd,
+                GeldigVanaf = DateTimeOffset.Now.Date.AddDays(-2),
+                GeldigTot = DateTimeOffset.Now.AddDays(7),
+                Ernst = Ernst.Informatie,
+                Titel = "Systeemonderhoud",
+                Inhoud = "Er is gepland systeemonderhoud op 15 juni.",
+                Platformen = [ Platform.Lara, Platform.Geoit ],
+                Rollen = [ Rol.NietIngelogd, Rol.StandaardGebruiker, Rol.InterneBeheerder ],
+                KanSluiten = true,
+                Links = [ new NotificatieLink("Meer info", "https://example.com/onderhoud") ]
+            }
+        ];
+    }
+}

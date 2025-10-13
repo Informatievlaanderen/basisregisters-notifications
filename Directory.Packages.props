@@ -25,6 +25,7 @@
     <PackageVersion Include="System.Text.Json" Version="9.0.3"/>
     <PackageVersion Include="System.Net.Http.Json" Version="9.0.3"/>
 
+    <PackageVersion Include="Swashbuckle.AspNetCore.Filters.Abstractions" Version="8.0.2" />
     <PackageVersion Include="SwashBuckle.AspNetCore.Swagger" Version="8.1.0"/>
     <PackageVersion Include="SwashBuckle.AspNetCore.SwaggerGen" Version="8.1.0"/>
     <PackageVersion Include="SwashBuckle.AspNetCore.SwaggerUI" Version="8.1.0"/>

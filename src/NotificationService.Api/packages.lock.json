@@ -1936,7 +1936,8 @@
       "Be.Vlaanderen.Basisregisters.NotificationService.Abstractions": {
         "type": "Project",
         "dependencies": {
-          "Newtonsoft.Json": "[13.0.3, )"
+          "Newtonsoft.Json": "[13.0.3, )",
+          "Swashbuckle.AspNetCore.Filters.Abstractions": "[8.0.2, )"
         }
       },
       "Marten.AspNetCore": {
