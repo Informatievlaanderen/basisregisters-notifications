@@ -40,7 +40,7 @@ public class WhenGettingNotificationsByPlatform : IClassFixture<NotificationServ
             Titel = "Geoit Test Titel",
             Platformen = [Platform.Geoit],
             Rollen = [Rol.InterneBeheerder],
-            Ernst = Ernst.Informatie
+            Ernst = NotificatieErnst.Informatie
         };
         var createResult = await clientIntern.MaakNotificatie(geoitNotificationRequest);
         await clientIntern.PubliceerNotificatie(createResult.NotificatieId);
@@ -52,7 +52,7 @@ public class WhenGettingNotificationsByPlatform : IClassFixture<NotificationServ
             Titel = "Lara Test Titel",
             Platformen = [Platform.Lara],
             Rollen = [Rol.InterneBeheerder],
-            Ernst = Ernst.Waarschuwing
+            Ernst = NotificatieErnst.Waarschuwing
         };
 
         createResult = await clientIntern.MaakNotificatie(laraNotificationRequest);

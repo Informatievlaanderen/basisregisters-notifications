@@ -21,7 +21,7 @@ public sealed class Notificatie
     public required DateTimeOffset GeldigTot { get; init; }
 
     [JsonProperty("ernst")]
-    public required Ernst Ernst { get; init; }
+    public required NotificatieErnst Ernst { get; init; }
 
     [JsonProperty("titel")]
     public required string Titel { get; init; }
@@ -56,7 +56,7 @@ public class GetNotificatiesResponseExample : IExamplesProvider<Notificatie[]>
                 Status = NotificatieStatus.Gepubliceerd,
                 GeldigVanaf = DateTimeOffset.Now.Date.AddDays(-2),
                 GeldigTot = DateTimeOffset.Now.AddDays(7),
-                Ernst = Ernst.Informatie,
+                Ernst = NotificatieErnst.Informatie,
                 Titel = "Systeemonderhoud",
                 Inhoud = "Er is gepland systeemonderhoud op 15 juni.",
                 Platformen = [ Platform.Lara, Platform.Geoit ],

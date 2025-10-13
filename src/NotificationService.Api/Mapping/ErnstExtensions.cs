@@ -6,21 +6,21 @@ using NotificationService.Notification;
 
 public static class ErnstExtensions
 {
-    public static Severity MapToSeverity(this Ernst ernst) =>
+    public static Severity MapToSeverity(this NotificatieErnst ernst) =>
         ernst switch
         {
-            Ernst.Informatie => Severity.Information,
-            Ernst.Waarschuwing => Severity.Warning,
-            Ernst.Fout => Severity.Error,
-            _ => throw new NotImplementedException($"{nameof(Ernst)}.{ernst}")
+            NotificatieErnst.Informatie => Severity.Information,
+            NotificatieErnst.Waarschuwing => Severity.Warning,
+            NotificatieErnst.Fout => Severity.Error,
+            _ => throw new NotImplementedException($"{nameof(NotificatieErnst)}.{ernst}")
         };
 
-    public static Ernst MapToErnst(this Severity severity) =>
+    public static NotificatieErnst MapToErnst(this Severity severity) =>
         severity switch
         {
-            Severity.Information => Ernst.Informatie,
-            Severity.Warning => Ernst.Waarschuwing,
-            Severity.Error => Ernst.Fout,
+            Severity.Information => NotificatieErnst.Informatie,
+            Severity.Warning => NotificatieErnst.Waarschuwing,
+            Severity.Error => NotificatieErnst.Fout,
             _ => throw new NotImplementedException($"{nameof(Severity)}.{severity}")
         };
 }

@@ -13,7 +13,7 @@ public sealed class MaakNotificatieRequest
     public DateTimeOffset? GeldigTot { get; set; }
 
     [JsonProperty("ernst")]
-    public Ernst Ernst { get; set; }
+    public NotificatieErnst Ernst { get; set; }
 
     [JsonProperty("titel")]
     public required string Titel { get; set; }

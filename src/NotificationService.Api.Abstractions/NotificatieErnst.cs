@@ -1,6 +1,6 @@
 namespace NotificationService.Api.Abstractions;
 
-public enum Ernst
+public enum NotificatieErnst
 {
     Informatie,
     Waarschuwing,

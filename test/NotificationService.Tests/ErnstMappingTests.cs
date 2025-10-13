@@ -14,8 +14,8 @@ public class ErnstMappingTests
     public void EnsureAllApiEnumValuesAreMapped()
     {
         // Arrange
-        var mappedValues = Enum.GetValues(typeof(Ernst))
-            .Cast<Ernst>()
+        var mappedValues = Enum.GetValues(typeof(NotificatieErnst))
+            .Cast<NotificatieErnst>()
             .Select(ns => ns.MapToSeverity())
             .ToArray();
 

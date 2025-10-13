@@ -35,7 +35,7 @@ public class WhenCreatingNotification : IClassFixture<NotificationServiceTestFix
             Titel = "Test Titel",
             Platformen = [Platform.Geoit, Platform.Lara],
             Rollen = [Rol.InterneBeheerder, Rol.NietIngelogd, Rol.StandaardGebruiker],
-            Ernst = Ernst.Waarschuwing,
+            Ernst = NotificatieErnst.Waarschuwing,
             GeldigVanaf = DateTimeOffset.Now,
             GeldigTot = DateTimeOffset.Now.AddDays(1),
             KanSluiten = false,

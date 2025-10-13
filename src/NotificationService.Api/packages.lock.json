@@ -1511,11 +1511,6 @@
           "Swashbuckle.AspNetCore.SwaggerGen": "5.0.0"
         }
       },
-      "Swashbuckle.AspNetCore.Filters.Abstractions": {
-        "type": "Transitive",
-        "resolved": "8.0.2",
-        "contentHash": "RgQ1RbxmofrkBSrLkA/34DWwzz4rKHRwC4vHOvevru2CNqymUPn3kRhbIX29g4yvj2sCff1glf19djnyM9kuUQ=="
-      },
       "Swashbuckle.AspNetCore.Newtonsoft": {
         "type": "Transitive",
         "resolved": "8.1.0",
@@ -1963,6 +1958,12 @@
         "requested": "[13.0.3, )",
         "resolved": "13.0.3",
         "contentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ=="
+      },
+      "Swashbuckle.AspNetCore.Filters.Abstractions": {
+        "type": "CentralTransitive",
+        "requested": "[8.0.2, )",
+        "resolved": "8.0.2",
+        "contentHash": "RgQ1RbxmofrkBSrLkA/34DWwzz4rKHRwC4vHOvevru2CNqymUPn3kRhbIX29g4yvj2sCff1glf19djnyM9kuUQ=="
       },
       "System.Text.Json": {
         "type": "CentralTransitive",

@@ -34,7 +34,7 @@ public class WhenPublishingNotification : IClassFixture<NotificationServiceTestF
             Titel = "Test Titel voor Publicatie",
             Platformen = [Platform.Geoit, Platform.Lara],
             Rollen = [Rol.InterneBeheerder, Rol.NietIngelogd, Rol.StandaardGebruiker],
-            Ernst = Ernst.Informatie,
+            Ernst = NotificatieErnst.Informatie,
             GeldigVanaf = DateTimeOffset.Now,
             GeldigTot = DateTimeOffset.Now.AddDays(1),
             KanSluiten = true,
