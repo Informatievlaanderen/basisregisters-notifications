@@ -23,7 +23,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService.Api.IntegrationTests", "test\NotificationService.Api.IntegrationTests\NotificationService.Api.IntegrationTests.csproj", "{6B218CAB-C625-43F1-900B-922D460D0336}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService.Abstractions", "src\NotificationService.Abstractions\NotificationService.Abstractions.csproj", "{64EB169A-5711-4D68-970B-4C65C6AA5B09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService.Api.Abstractions", "src\NotificationService.Api.Abstractions\NotificationService.Api.Abstractions.csproj", "{64EB169A-5711-4D68-970B-4C65C6AA5B09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService.Tests", "test\NotificationService.Tests\NotificationService.Tests.csproj", "{CEFC0646-433D-4916-A9A3-8F194C74ABEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{64EB169A-5711-4D68-970B-4C65C6AA5B09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64EB169A-5711-4D68-970B-4C65C6AA5B09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64EB169A-5711-4D68-970B-4C65C6AA5B09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEFC0646-433D-4916-A9A3-8F194C74ABEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEFC0646-433D-4916-A9A3-8F194C74ABEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEFC0646-433D-4916-A9A3-8F194C74ABEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEFC0646-433D-4916-A9A3-8F194C74ABEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +62,7 @@ Global
 		{46F1B1C0-4AAA-4F58-956A-B1309B4183CC} = {24B47154-C5F0-4356-B059-49A1E72C38A6}
 		{6B218CAB-C625-43F1-900B-922D460D0336} = {1A034126-30E6-416B-BB2E-F5786E07B178}
 		{64EB169A-5711-4D68-970B-4C65C6AA5B09} = {24B47154-C5F0-4356-B059-49A1E72C38A6}
+		{CEFC0646-433D-4916-A9A3-8F194C74ABEA} = {1A034126-30E6-416B-BB2E-F5786E07B178}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65FA30D5-DDFC-40EC-9BC9-3BF93D1B430F}

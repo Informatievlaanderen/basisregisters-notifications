@@ -1,19 +1,35 @@
-namespace NotificationService.Abstractions;
+namespace NotificationService.Notification;
 
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 public record Notification(
-    Guid NotificationId)
+    int NotificationId,
+    NotificationStatus Status,
+    Severity Severity,
+    string Title,
+    string BodyMd,
+    ICollection<string> Platforms,
+    ICollection<string> Roles,
+    DateTimeOffset ValidFrom,
+    DateTimeOffset ValidTo,
+    bool CanClose,
+    ICollection<NotificationLink> Links)
 {
     private readonly DateTimeOffset _created = DateTimeOffset.UtcNow;
     private DateTimeOffset _lastModified = DateTimeOffset.UtcNow;
 
-    /// <summary>
-    /// De unieke identificator van de notificatie.
-    /// </summary>
-    public Guid NotificationId { get; set; } = NotificationId;
+    public int NotificationId { get; set; } = NotificationId;
+    public NotificationStatus Status { get; set; } = Status;
+    public Severity Severity { get; set; } = Severity;
+    public string Title { get; set; } = Title;
+    public string BodyMd { get; set; } = BodyMd;
+    public ICollection<string> Platforms { get; set; } = Platforms;
+    public ICollection<string> Roles { get; set; } = Roles;
+    public DateTimeOffset ValidFrom { get; set; } = ValidFrom;
+    public DateTimeOffset ValidTo { get; set; } = ValidTo;
+    public bool CanClose { get; set; } = CanClose;
+    public ICollection<NotificationLink> Links { get; set; } = Links;
 
     /// <summary>
     /// De datum en het tijdstip waarop de notificatie is aangemaakt (timestamp volgens RFC 3339) (notatie: lokale tijd + verschil t.o.v. UTC).
