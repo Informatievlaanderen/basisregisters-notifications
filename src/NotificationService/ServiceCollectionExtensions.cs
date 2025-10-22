@@ -2,11 +2,10 @@ namespace NotificationService;
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Abstractions;
 using Marten;
-using Marten.Schema.Identity;
-using Marten.Services;
+using Marten.Schema.Identity.Sequences;
 using Microsoft.Extensions.DependencyInjection;
+using Notification;
 using Weasel.Core;
 
 public static class ServiceCollectionExtensions
@@ -17,33 +16,22 @@ public static class ServiceCollectionExtensions
         {
             options.Connection(connectionString);
             options.AutoCreateSchemaObjects = AutoCreate.All;
-            options.Schema.For<Notification>()
-                .IdStrategy(new CombGuidIdGeneration())
-                .Identity(x => x.NotificationId);
 
-            options.UseSystemTextJsonForSerialization();
+            var hiloSettings = new HiloSettings { MaxLo = 1 };
+            options.Schema.For<Notification.Notification>()
+                .Identity(x => x.NotificationId)
+                .IdStrategy(new HiloIdGeneration(typeof(Notification.Notification), hiloSettings))
+                .HiloSettings(hiloSettings);
 
-            // Optionally configure the serializer directly
-            var systemTextJsonSerializer = new SystemTextJsonSerializer
-            {
-                // Optionally override the enum storage
-                EnumStorage = EnumStorage.AsString,
-
-                // Optionally override the member casing
-                Casing = Casing.CamelCase,
-            };
-
-            systemTextJsonSerializer.Configure(serializerOptions =>
+            options.UseSystemTextJsonForSerialization(EnumStorage.AsString, Casing.CamelCase, serializerOptions =>
             {
                 serializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
                 serializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-                serializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
+                serializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never; // Important for serializing default Enum values
             });
-
-            options.Serializer(systemTextJsonSerializer);
         });
 
-        services.AddSingleton<INotifications, MartenNotifications>();
+        services.AddSingleton<INotificationsRepository, MartenNotificationsRepository>();
         return services;
     }
 }

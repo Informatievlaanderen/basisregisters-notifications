@@ -10,20 +10,12 @@
     <ProjectReference Include="..\..\src\NotificationService\NotificationService.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="appsettings.json" CopyToOutputDirectory="Always" />
-    <Content Include="appsettings.*.json" CopyToOutputDirectory="Always" />
-    <Content Include="postgres_test.yml" CopyToOutputDirectory="Always" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Be.Vlaanderen.Basisregisters.Auth.AcmIdm" />
-
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.categories" />
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="FluentAssertions" />
-    <PackageReference Include="Be.Vlaanderen.Basisregisters.DockerUtilities" />
     <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+    <PackageReference Include="AutoFixture" />
   </ItemGroup>
 </Project>
