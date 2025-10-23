@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/informatievlaanderen/basisregisters-notifications/compare/v1.0.1...v1.0.2) (2025-10-23)
+
+
+### Bug Fixes
+
+* **ci:** add trigger test + image name ([2c9fb19](https://github.com/informatievlaanderen/basisregisters-notifications/commit/2c9fb19896efc5888ea9b2cb125046e1030f3902))
+
 ## [1.0.1](https://github.com/informatievlaanderen/basisregisters-notifications/compare/v1.0.0...v1.0.1) (2025-10-23)
 
 
