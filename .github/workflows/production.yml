@@ -1,4 +1,4 @@
-name: CD New Production
+name: CD Production
 run-name: 'Manual Production Deploy: ${{ github.event.inputs.version }}'
 concurrency: Manual Production Deploy
 
