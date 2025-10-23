@@ -6,7 +6,7 @@
   "license": "EUPL-1.2",
   "repository": {
     "type": "git",
-    "url": "git@github.com:informatievlaanderen/notification-service.git"
+    "url": "git@github.com:informatievlaanderen/basisregisters-notifications.git"
   },
   "dependencies": {},
   "devDependencies": {
