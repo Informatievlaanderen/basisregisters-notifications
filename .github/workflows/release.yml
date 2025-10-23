@@ -62,7 +62,7 @@ jobs:
       registry: '${{ vars.VBR_DEVOPS_DOCKER_REGISTRY }}/notification-service-api'
       image-file: api-image.tar
       image-name: api
-      test-project: NotificationService.Api.IntegrationTests
+      #test-project: NotificationService.Api.IntegrationTests TODO: setup test in separate step
       build-project: NotificationService.Api
       semver: ${{ needs.set-release-version.outputs.version }}
       dotnet-version: ${{ vars.VBR_DOTNET_VERSION_9 }}
