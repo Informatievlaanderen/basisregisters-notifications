@@ -1975,7 +1975,7 @@
           "Microsoft.Extensions.DependencyInjection": "[9.0.3, )"
         }
       },
-      "Be.Vlaanderen.Basisregisters.NotificationService.Abstractions": {
+      "Be.Vlaanderen.Basisregisters.NotificationService.Api.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Newtonsoft.Json": "[13.0.3, )",
@@ -1990,7 +1990,7 @@
           "Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Middleware.AddVersionHeader": "[5.0.0, )",
           "Be.Vlaanderen.Basisregisters.Auth.AcmIdm": "[4.0.1, )",
           "Be.Vlaanderen.Basisregisters.NotificationService": "[1.0.0, )",
-          "Be.Vlaanderen.Basisregisters.NotificationService.Abstractions": "[1.0.0, )",
+          "Be.Vlaanderen.Basisregisters.NotificationService.Api.Abstractions": "[1.0.0, )",
           "Datadog.Trace.Bundle": "[3.14.2, )",
           "Destructurama.JsonNet": "[4.0.2, )",
           "FluentValidation": "[11.5.1, )",

@@ -7,8 +7,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <Version>1.0.0</Version>
-    <PackageId>Be.Vlaanderen.Basisregisters.NotificationService.Abstractions</PackageId>
-    <Title>Be.Vlaanderen.Basisregisters.NotificationService.Abstractions</Title>
+    <PackageId>Be.Vlaanderen.Basisregisters.NotificationService.Api.Abstractions</PackageId>
+    <Title>Be.Vlaanderen.Basisregisters.NotificationService.Api.Abstractions</Title>
     <Authors>Basisregisters Vlaanderen</Authors>
     <Owners>Digitaal Vlaanderen</Owners>
     <Copyright>Copyright (c) Digitaal Vlaanderen</Copyright>
@@ -16,7 +16,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/Informatievlaanderen/basisregisters-notifications</PackageProjectUrl>
     <PackageIcon>logo.png</PackageIcon>
-    <Description>NotificationService Abstractions.</Description>
+    <Description>NotificationService Api Abstractions.</Description>
   </PropertyGroup>
 
   <ItemGroup>

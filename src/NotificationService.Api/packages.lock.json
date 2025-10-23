@@ -1928,7 +1928,7 @@
           "Microsoft.Extensions.DependencyInjection": "[9.0.3, )"
         }
       },
-      "Be.Vlaanderen.Basisregisters.NotificationService.Abstractions": {
+      "Be.Vlaanderen.Basisregisters.NotificationService.Api.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Newtonsoft.Json": "[13.0.3, )",
