@@ -70,13 +70,13 @@ jobs:
     secrets: inherit
 
   pack-abstractions:
-    name: Pack NotificationService.Abstractions
+    name: Pack NotificationService.Api.Abstractions
     uses: Informatievlaanderen/build-pipeline/.github/workflows/pack-v2.yml@main
     needs: [ set-release-version ]
     if: ${{ (github.repository_owner == 'Informatievlaanderen') && (needs.set-release-version.outputs.version != 'none') }}
     with:
-      pack-file: Be.Vlaanderen.Basisregisters.NotificationService.Abstractions
-      build-project: NotificationService.Abstractions
+      pack-file: Be.Vlaanderen.Basisregisters.NotificationService.Api.Abstractions
+      build-project: NotificationService.Api.Abstractions
       semver: ${{ needs.set-release-version.outputs.version }}
       dotnet-version: ${{ vars.VBR_DOTNET_VERSION_9 }}
       prerestore-script: ./pre-restore.sh
