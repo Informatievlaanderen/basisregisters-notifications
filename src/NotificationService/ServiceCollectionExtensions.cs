@@ -29,6 +29,8 @@ public static class ServiceCollectionExtensions
                 serializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
                 serializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never; // Important for serializing default Enum values
             });
+
+            options.DatabaseSchemaName = "notifications";
         });
 
         services.AddSingleton<INotificationsRepository, MartenNotificationsRepository>();
