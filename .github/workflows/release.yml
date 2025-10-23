@@ -59,9 +59,9 @@ jobs:
     needs: [ set-release-version ]
     if: ${{ (github.repository_owner == 'Informatievlaanderen') && (needs.set-release-version.outputs.version != 'none') }}
     with:
-      registry: '${{ vars.VBR_DEVOPS_DOCKER_REGISTRY }}/default/notification-api'
-      image-file: api-image.tar
-      image-name: api
+      registry: '${{ vars.VBR_DEVOPS_DOCKER_REGISTRY }}/default'
+      image-file: notification-api-image.tar
+      image-name: notification-api
       #test-project: NotificationService.Api.IntegrationTests TODO: setup test in separate step
       build-project: NotificationService.Api
       semver: ${{ needs.set-release-version.outputs.version }}
@@ -219,7 +219,7 @@ jobs:
         uses: actions/download-artifact@v4
         continue-on-error: false
         with:
-          name: api-${{ needs.release.outputs.version }}
+          name: notification-api-${{ needs.release.outputs.version }}
           path: ~/
 
       - name: Load NotificationService API artifact
@@ -228,7 +228,7 @@ jobs:
           echo $IMAGE-image.tar
           docker image load -i ~/$IMAGE-image.tar
         env:
-          IMAGE: api
+          IMAGE: notification-api
 
       - name: Configure AWS credentials
         if: needs.release.outputs.version != 'none'
@@ -295,3 +295,29 @@ jobs:
           CONFLUENCE_TITLE: ${{ env.REPOSITORY_NAME }}
           CONFLUENCE_USERNAME: ${{ secrets.VBR_CONFLUENCE_USER }}
           CONFLUENCE_PASSWORD: ${{ secrets.VBR_CONFLUENCE_PASSWORD }}
+
+  trigger_tests:
+    needs: [ 
+      release, 
+      publish_to_nuget, 
+      push_images, 
+      publish_to_atlassian 
+    ]
+    if: ${{ (github.repository_owner == 'Informatievlaanderen') && (needs.release.outputs.version != 'none') }}
+    name: CD Test Trigger
+    runs-on: ubuntu-latest
+    steps:
+      - name: CD Test Trigger
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.VBR_GIT_RELEASE_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'test.yml',
+              ref: 'main',
+              inputs: {
+                version: '${{ needs.release.outputs.version }}'
+              }
+            });
