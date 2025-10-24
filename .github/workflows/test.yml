@@ -10,31 +10,52 @@ on:
         required: true
 
 jobs:
-  deployment:
+  deploy_start_slack:
+    if: github.repository_owner == 'Informatievlaanderen'
+    name: Deploy started
     runs-on: ubuntu-latest
-    strategy:
-      matrix: 
-        services: ['notification-service-api']
+
     steps:
-    - name: CD
-      env:
-        BUILD_URL: ${{ vars.VBR_AWS_BUILD_API_DEVOPS }}/${{matrix.services}}
-        STATUS_URL: ${{ vars.VBR_AWS_BUILD_STATUS_API_DEVOPS }}/${{matrix.services}}
-      uses: informatievlaanderen/awscurl-polling-action/polling-action@main
+    - name: Notify deployment started
+      uses: slackapi/slack-github-action@v2.0.0
       with:
-          environment: tst
-          version: ${{ github.event.inputs.version }}
-          status-url: $STATUS_URL
-          deploy-url: $BUILD_URL
-          access-key: ${{ secrets.VBR_AWS_ACCESS_KEY_ID_DEVOPS }}
-          secret-key: ${{ secrets.VBR_AWS_SECRET_ACCESS_KEY_DEVOPS }}
-          interval: 2
-          deploy-target: 'agb_ecs_service'
-          domain: 'basisregisters'
-          project: 'basisregisters'
-    - name: output
-      shell: bash
-      run: |
-        echo build-uuid: ${{ steps.awscurl-polling-action.outputs.build-uuid }}
-        echo Status: ${{ steps.awscurl-polling-action.outputs.status }}
-        echo ${{ steps.awscurl-polling-action.outputs.final-message }}
+        method: chat.postMessage
+        token: ${{ secrets.VBR_SLACK_BOT_TOKEN }}
+        payload: |
+          channel: '#team-dinosaur-dev'
+          text: 'Deployment of basisregisters-notification to tst has started'
+
+  deploy_services:
+    if: github.repository_owner == 'Informatievlaanderen'
+    needs: [ deploy_start_slack ]
+    name: Deploy
+    uses: informatievlaanderen/build-pipeline/.github/workflows/deploy-v4.yml@main
+    strategy:
+      matrix:
+        services: [
+          'default-notification-api'
+        ]
+    with:
+      environment: tst
+      service-name: ${{ matrix.services }}
+      version: ${{ github.event.inputs.version }}
+      domain: 'basisregisters'
+      project: 'basisregisters'
+    secrets: inherit
+
+  deploy_finish_slack:
+    if: github.repository_owner == 'Informatievlaanderen'
+    needs: [ deploy_services ]
+    name: Deploy finished
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Notify deployment finished
+      uses: slackapi/slack-github-action@v2.0.0
+      with:
+        method: chat.postMessage
+        token: ${{ secrets.VBR_SLACK_BOT_TOKEN }}
+        payload: |
+          channel: '#team-dinosaur-dev'
+          text: 'Deployment of basisregisters-integration to tst has finished'
+
