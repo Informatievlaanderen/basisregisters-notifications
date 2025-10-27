@@ -90,7 +90,7 @@ public class WhenDeletingNotification : IClassFixture<NotificationServiceTestFix
 
         // Publish the notification
         var publishResponse = await client.PostAsync($"v1/notificaties/{notificationId}/acties/publiceren", null);
-        publishResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        publishResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         // Try to delete published notification (should fail)
         var deleteResponse = await client.PostAsync($"v1/notificaties/{notificationId}/acties/verwijderen", null);
@@ -123,11 +123,11 @@ public class WhenDeletingNotification : IClassFixture<NotificationServiceTestFix
 
         // Publish the notification
         var publishResponse = await client.PostAsync($"v1/notificaties/{notificationId}/acties/publiceren", null);
-        publishResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        publishResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         // Unpublish the notification
         var unpublishResponse = await client.PostAsync($"v1/notificaties/{notificationId}/acties/intrekken", null);
-        unpublishResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        unpublishResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         // Try to delete unpublished notification (should fail)
         var deleteResponse = await client.PostAsync($"v1/notificaties/{notificationId}/acties/verwijderen", null);

@@ -47,12 +47,15 @@ public class WhenUnpublishingNotification : IClassFixture<NotificationServiceTes
 
         // Publish notification first
         var publishResponse = await client.PostAsync($"v1/notificaties/{notificationId}/acties/publiceren", null);
-        publishResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        publishResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         // Unpublish notification
         var unpublishResponse = await client.PostAsync($"v1/notificaties/{notificationId}/acties/intrekken", null);
 
-        unpublishResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        unpublishResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var responseNotification = JsonConvert.DeserializeObject<Notificatie>(await unpublishResponse.Content.ReadAsStringAsync());
+        responseNotification.Should().NotBeNull();
+        responseNotification!.Status.Should().Be(NotificatieStatus.Ingetrokken);
     }
 
     [Fact]
