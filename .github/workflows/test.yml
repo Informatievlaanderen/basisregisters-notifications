@@ -33,7 +33,7 @@ jobs:
     strategy:
       matrix:
         services: [
-          'default-notification-api'
+          'default-notificationapi'
         ]
     with:
       environment: tst
