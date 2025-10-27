@@ -2,10 +2,12 @@ namespace NotificationService.Api.Notification;
 
 using System.Threading;
 using System.Threading.Tasks;
+using Abstractions;
 using Be.Vlaanderen.Basisregisters.Api.Exceptions;
 using Be.Vlaanderen.Basisregisters.Auth.AcmIdm;
 using FluentValidation;
 using FluentValidation.Results;
+using Mapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +19,7 @@ using Validation;
 public partial class NotificationsController
 {
     [HttpPost("{id}/acties/intrekken")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Notificatie), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -32,8 +34,8 @@ public partial class NotificationsController
     {
         try
         {
-            await notificationsRepository.UnpublishNotification(id, cancellationToken);
-            return NoContent();
+            var notification = await notificationsRepository.UnpublishNotification(id, cancellationToken);
+            return Ok(notification.MapToNotificatie());
         }
         catch (NotificationNotFoundException)
         {

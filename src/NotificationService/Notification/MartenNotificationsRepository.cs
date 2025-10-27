@@ -52,7 +52,7 @@ public class MartenNotificationsRepository : INotificationsRepository
         return notification.NotificationId;
     }
 
-    public async Task PublishNotification(int notificationId, CancellationToken cancellationToken)
+    public async Task<Notification> PublishNotification(int notificationId, CancellationToken cancellationToken)
     {
         await using var session = _store.DirtyTrackedSession();
 
@@ -68,9 +68,11 @@ public class MartenNotificationsRepository : INotificationsRepository
 
         session.Update(notification);
         await session.SaveChangesAsync(cancellationToken);
+
+        return notification;
     }
 
-    public async Task UnpublishNotification(int notificationId, CancellationToken cancellationToken)
+    public async Task<Notification> UnpublishNotification(int notificationId, CancellationToken cancellationToken)
     {
         await using var session = _store.DirtyTrackedSession();
 
@@ -91,6 +93,8 @@ public class MartenNotificationsRepository : INotificationsRepository
 
         session.Update(notification);
         await session.SaveChangesAsync(cancellationToken);
+
+        return notification;
     }
 
     public async Task DeleteNotification(int notificationId, CancellationToken cancellationToken)

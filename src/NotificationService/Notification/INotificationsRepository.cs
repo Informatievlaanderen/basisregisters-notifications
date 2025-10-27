@@ -19,9 +19,9 @@ public interface INotificationsRepository
         ICollection<NotificationLink> links,
         CancellationToken cancellationToken = default);
 
-    Task PublishNotification(int notificationId, CancellationToken cancellationToken = default);
+    Task<Notification> PublishNotification(int notificationId, CancellationToken cancellationToken = default);
 
-    Task UnpublishNotification(int notificationId, CancellationToken cancellationToken = default);
+    Task<Notification> UnpublishNotification(int notificationId, CancellationToken cancellationToken = default);
 
     Task DeleteNotification(int notificationId, CancellationToken cancellationToken = default);
 

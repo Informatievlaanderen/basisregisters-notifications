@@ -48,7 +48,10 @@ public class WhenPublishingNotification : IClassFixture<NotificationServiceTestF
         // Publish notification
         var publishResponse = await client.PostAsync($"v1/notificaties/{notificationId}/acties/publiceren", null);
 
-        publishResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        publishResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var responseNotification = JsonConvert.DeserializeObject<Notificatie>(await publishResponse.Content.ReadAsStringAsync());
+        responseNotification.Should().NotBeNull();
+        responseNotification!.Status.Should().Be(NotificatieStatus.Gepubliceerd);
     }
 
     [Fact]
