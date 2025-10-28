@@ -33,13 +33,13 @@ jobs:
     strategy:
       matrix:
         services: [
-          'default-notificationapi'
+          'default-notification-api'
         ]
     with:
       environment: tst
       service-name: ${{ matrix.services }}
       version: ${{ github.event.inputs.version }}
-      domain: 'basisregisters'
+      domain: 'default'
       project: 'basisregisters'
     secrets: inherit
 
