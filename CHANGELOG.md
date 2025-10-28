@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/informatievlaanderen/basisregisters-notifications/compare/v1.0.2...v1.1.0) (2025-10-28)
+
+
+### Bug Fixes
+
+* set default database name ([41647eb](https://github.com/informatievlaanderen/basisregisters-notifications/commit/41647ebdcb067ad56c7eb16512a4c200d374f6ae))
+
+
+### Features
+
+* return notification when publish or unpublish ([aa98ba4](https://github.com/informatievlaanderen/basisregisters-notifications/commit/aa98ba491d9b234abdd3ec3678ea316dd9994877))
+
 ## [1.0.2](https://github.com/informatievlaanderen/basisregisters-notifications/compare/v1.0.1...v1.0.2) (2025-10-23)
 
 
