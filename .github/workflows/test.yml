@@ -33,14 +33,14 @@ jobs:
     strategy:
       matrix:
         services: [
-          'notification-api'
+          'default-notification-api'
         ]
     with:
       environment: tst
       service-name: ${{ matrix.services }}
       version: ${{ github.event.inputs.version }}
       domain: 'basisregisters'
-      project: 'default'
+      project: 'basisregisters'
     secrets: inherit
 
   deploy_finish_slack:
