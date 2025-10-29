@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/informatievlaanderen/basisregisters-notifications/compare/v1.1.0...v1.1.1) (2025-10-29)
+
+
+### Bug Fixes
+
+* move notificationFilter to abstractions ([0696f00](https://github.com/informatievlaanderen/basisregisters-notifications/commit/0696f009fb5f3c0835a674790d73bb0ed00db2b5))
+
 # [1.1.0](https://github.com/informatievlaanderen/basisregisters-notifications/compare/v1.0.2...v1.1.0) (2025-10-28)
 
 
