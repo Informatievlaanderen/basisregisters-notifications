@@ -1,6 +1,7 @@
 namespace NotificationService.Tests;
 
 using System;
+using Api.Abstractions;
 using Api.Notification;
 using AutoFixture;
 using FluentValidation.TestHelper;
