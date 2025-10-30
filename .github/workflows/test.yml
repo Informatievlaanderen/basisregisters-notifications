@@ -13,6 +13,7 @@ jobs:
   deploy_start_slack:
     if: github.repository_owner == 'Informatievlaanderen'
     name: Deploy started
+    environment: tst
     runs-on: ubuntu-latest
 
     steps:
