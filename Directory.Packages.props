@@ -20,10 +20,10 @@
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3"/>
 
     <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0"/>
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3"/>
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.3"/>
-    <PackageVersion Include="System.Text.Json" Version="9.0.3"/>
-    <PackageVersion Include="System.Net.Http.Json" Version="9.0.3"/>
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.11"/>
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.11"/>
+    <PackageVersion Include="System.Text.Json" Version="9.0.11"/>
+    <PackageVersion Include="System.Net.Http.Json" Version="9.0.11"/>
 
     <PackageVersion Include="Swashbuckle.AspNetCore.Filters.Abstractions" Version="8.0.2" />
     <PackageVersion Include="SwashBuckle.AspNetCore.Swagger" Version="8.1.0"/>
@@ -41,8 +41,8 @@
     <PackageVersion Include="Destructurama.JsonNet" Version="4.0.2"/>
 
     <PackageVersion Include="Moq" Version="4.20.72"/>
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.3"/>
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.3"/>
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.11"/>
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.11"/>
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0"/>
     <PackageVersion Include="xunit" Version="2.9.3"/>
     <PackageVersion Include="xunit.categories" Version="3.0.1"/>
