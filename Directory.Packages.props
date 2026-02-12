@@ -26,9 +26,9 @@
     <PackageVersion Include="System.Net.Http.Json" Version="9.0.3"/>
 
     <PackageVersion Include="Swashbuckle.AspNetCore.Filters.Abstractions" Version="8.0.2" />
-    <PackageVersion Include="SwashBuckle.AspNetCore.Swagger" Version="8.1.0"/>
-    <PackageVersion Include="SwashBuckle.AspNetCore.SwaggerGen" Version="8.1.0"/>
-    <PackageVersion Include="SwashBuckle.AspNetCore.SwaggerUI" Version="8.1.0"/>
+    <PackageVersion Include="SwashBuckle.AspNetCore.Swagger" Version="8.1.4"/>
+    <PackageVersion Include="SwashBuckle.AspNetCore.SwaggerGen" Version="8.1.4"/>
+    <PackageVersion Include="SwashBuckle.AspNetCore.SwaggerUI" Version="8.1.4"/>
 
     <PackageVersion Include="Serilog" Version="4.2.0"/>
     <PackageVersion Include="Serilog.Settings.Configuration" Version="9.0.0"/>
