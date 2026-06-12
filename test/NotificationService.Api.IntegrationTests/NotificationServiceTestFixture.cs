@@ -6,15 +6,21 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Formatters.Json;
 using Be.Vlaanderen.Basisregisters.Auth.AcmIdm;
-using IdentityModel;
-using IdentityModel.Client;
+using Duende.IdentityModel;
+using Duende.IdentityModel.Client;
 using Infrastructure;
+using Infrastructure.Modules;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Npgsql;
 using Xunit;
@@ -51,15 +57,28 @@ public class NotificationServiceTestFixture : IAsyncLifetime
         configurationBuilder.AddInMemoryCollection([new("ConnectionStrings:Marten", connectionString)]);
         var configuration = configurationBuilder.Build();
 
-        var hostBuilder = new WebHostBuilder()
-            .UseConfiguration(configuration)
-            .UseStartup<Startup>()
-            .ConfigureLogging(loggingBuilder => loggingBuilder.AddConsole())
-            .UseTestServer();
+        var hostBuilder = new HostBuilder()
+            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .ConfigureContainer<ContainerBuilder>(builder =>
+            {
+                var services = new ServiceCollection();
+                var loggerFactory = new NullLoggerFactory();
+                builder.RegisterModule(new ApiModule(configuration, services, loggerFactory));
+            })
+            .ConfigureWebHost(webhostBuilder =>
+            {
+                webhostBuilder.UseConfiguration(configuration)
+                    .UseStartup<Startup>()
+                    .ConfigureLogging(loggingBuilder => loggingBuilder.AddConsole())
+                    .UseTestServer();
+            })
+            .Build();
+
+        await hostBuilder.StartAsync();
 
         _clientId = configuration.GetValue<string>("ClientId")!;
         _clientSecret = configuration.GetValue<string>("ClientSecret")!;
-        TestServer = new TestServer(hostBuilder);
+        TestServer = hostBuilder.GetTestServer();
     }
 
     public async Task<string> GetAccessToken(string requiredScopes = "")

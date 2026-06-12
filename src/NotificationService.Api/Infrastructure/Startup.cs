@@ -4,45 +4,37 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Asp.Versioning.ApiExplorer;
-using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Be.Vlaanderen.Basisregisters.Api;
 using Be.Vlaanderen.Basisregisters.Auth.AcmIdm;
 using Configuration;
+using Duende.AspNetCore.Authentication.OAuth2Introspection;
 using FluentValidation;
-using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using Modules;
+using Microsoft.OpenApi;
 
 /// <summary>Represents the startup process for the application.</summary>
 public class Startup
 {
     private const string DatabaseTag = "db";
 
-    private IContainer _applicationContainer = null!;
-
     private readonly IConfiguration _configuration;
-    private readonly ILoggerFactory _loggerFactory;
 
-    public Startup(
-        IConfiguration configuration,
-        ILoggerFactory loggerFactory)
+    public Startup(IConfiguration configuration)
     {
         _configuration = configuration;
-        _loggerFactory = loggerFactory;
     }
 
     /// <summary>Configures services for the application.</summary>
     /// <param name="services">The collection of services to configure the application with.</param>
-    public IServiceProvider ConfigureServices(IServiceCollection services)
+    public void ConfigureServices(IServiceCollection services)
     {
         var oAuth2IntrospectionOptions = _configuration
             .GetSection(nameof(OAuth2IntrospectionOptions))
@@ -51,6 +43,7 @@ public class Startup
         var baseUrl = _configuration.GetValue<string>("BaseUrl")!.TrimEnd('/');
 
         services.AddAcmIdmAuthentication(oAuth2IntrospectionOptions!);
+
         services
             .ConfigureDefaultForApi<Startup>(new StartupConfigureOptions
                 {
@@ -103,14 +96,7 @@ public class Startup
                 }
                 .EnableJsonErrorActionFilterOption())
             .AddValidatorsFromAssemblyContaining<Startup>()
-            .AddSingleton<IActionContextAccessor, ActionContextAccessor>()
-            ;
-
-        var containerBuilder = new ContainerBuilder();
-        containerBuilder.RegisterModule(new ApiModule(_configuration, services, _loggerFactory));
-        _applicationContainer = containerBuilder.Build();
-
-        return new AutofacServiceProvider(_applicationContainer);
+            .AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     }
 
     public void Configure(
@@ -127,7 +113,7 @@ public class Startup
             {
                 Common =
                 {
-                    ApplicationContainer = _applicationContainer,
+                    ApplicationContainer = serviceProvider.GetAutofacRoot(),
                     ServiceProvider = serviceProvider,
                     HostingEnvironment = env,
                     ApplicationLifetime = appLifetime,
