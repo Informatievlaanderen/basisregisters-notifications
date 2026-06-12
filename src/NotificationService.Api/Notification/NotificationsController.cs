@@ -2,6 +2,7 @@ namespace NotificationService.Api.Notification;
 
 using Asp.Versioning;
 using Be.Vlaanderen.Basisregisters.Api;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
@@ -11,10 +12,4 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 [ApiExplorerSettings(GroupName = "notificaties")]
 public partial class NotificationsController : ApiController
 {
-    private readonly IActionContextAccessor _actionContextAccessor;
-
-    public NotificationsController(IActionContextAccessor actionContextAccessor)
-    {
-        _actionContextAccessor = actionContextAccessor;
-    }
 }
