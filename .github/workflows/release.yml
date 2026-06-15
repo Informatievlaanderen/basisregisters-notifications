@@ -234,7 +234,7 @@ jobs:
 
       - name: Configure AWS credentials
         if: needs.release.outputs.version != 'none'
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.VBR_AWS_CICD_ROLE }}
           aws-region: ${{ secrets.VBR_AWS_REGION_PRD }}
