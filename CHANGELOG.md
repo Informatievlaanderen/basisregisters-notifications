@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/informatievlaanderen/basisregisters-notifications/compare/v1.1.1...v2.0.0) (2026-06-18)
+
+
+### Features
+
+* update packages + upgrade to dotnet 10 ([5f7b5fb](https://github.com/informatievlaanderen/basisregisters-notifications/commit/5f7b5fbd5b310a48db9c38872ff885ce44f2cf1d))
+
+
+### BREAKING CHANGES
+
+* update to dotnet 10
+
 ## [1.1.1](https://github.com/informatievlaanderen/basisregisters-notifications/compare/v1.1.0...v1.1.1) (2025-10-29)
 
 
