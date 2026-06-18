@@ -257,8 +257,7 @@ jobs:
     needs: [ 
       release, 
       publish_to_nuget, 
-      push_images, 
-      publish_to_atlassian 
+      push_images 
     ]
     if: ${{ (github.repository_owner == 'Informatievlaanderen') && (needs.release.outputs.version != 'none') }}
     name: CD Test Trigger
