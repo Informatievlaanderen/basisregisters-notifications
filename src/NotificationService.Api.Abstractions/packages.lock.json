@@ -36,7 +36,7 @@
       },
       "Swashbuckle.AspNetCore.Swagger": {
         "type": "CentralTransitive",
-        "requested": "[10.2.1, )",
+        "requested": "[10.2.3, )",
         "resolved": "10.0.0",
         "contentHash": "X1GSq/Eh4FX58Jf7fjUyJLUoMh10jXv4VmT/BUqDAgKIkpo+UuL/SwGOZI+U8XiLFOxpAv4lGR0kFLVPs0wUIA==",
         "dependencies": {
@@ -45,7 +45,7 @@
       },
       "Swashbuckle.AspNetCore.SwaggerGen": {
         "type": "CentralTransitive",
-        "requested": "[10.2.1, )",
+        "requested": "[10.2.3, )",
         "resolved": "10.0.0",
         "contentHash": "B8C0JC1Iknubtslov37ZvDW9w53X9IQ05UFxXxJB41ZH8cwmzWTZnAXyvqeToJ/yZNfjdCOtKdwTSGiNkQvVuA==",
         "dependencies": {
