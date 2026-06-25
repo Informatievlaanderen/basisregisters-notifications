@@ -8,7 +8,7 @@
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.4.6"/>
 
     <PackageVersion Include="Be.Vlaanderen.Basisregisters.DockerUtilities" Version="4.1.0"/>
-    <PackageVersion Include="Be.Vlaanderen.Basisregisters.GrAr.Notifications" Version="24.1.0"/>
+    <PackageVersion Include="Be.Vlaanderen.Basisregisters.GrAr.Notifications" Version="24.4.1"/>
     <PackageVersion Include="Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Middleware.AddVersionHeader" Version="5.1.0"/>
     <PackageVersion Include="Be.Vlaanderen.Basisregisters.Api" Version="27.0.0"/>
     <PackageVersion Include="Be.Vlaanderen.Basisregisters.Auth.AcmIdm" Version="5.0.0"/>
